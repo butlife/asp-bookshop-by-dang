@@ -1,0 +1,151 @@
+* {
+	font-size:12px;
+}
+
+body {
+	margin:0 auto;
+	padding:0;
+	overflow-x:hidden;
+}
+
+a {
+	color:#039;
+	text-decoration: none;
+	font-size:12px;
+}
+
+a:hover {
+	color:#f60;
+	text-decoration: underline;
+	/*POSITION: relative;
+	TOP: 1px;*/
+}
+
+.Button{
+	font-size:12px;
+}
+
+.aButton{
+	height:20px;
+	line-height:20px;
+	margin:0 3px 0 3px;
+	border:1px solid #666;
+	background:#eee;
+	padding:5px;
+}
+
+#tableContainer {
+	overflow: auto;
+	width:98%;
+	padding-left:5px;
+}
+
+#fixedList {
+	border:1px solid #999;
+	border-collapse:collapse;
+}
+
+#tableContainer thead tr{
+	background:#DDDDDD;
+} 
+
+.ListItem {
+	height:24px;
+	line-height:24px;
+}
+
+.ListAlternatingItem {
+	height:24px;
+	line-height:24px;
+	background:#eeeeee;
+}
+
+div.Pagination {
+	width:90%;
+	text-align:center;
+	line-height:30em;
+	height:30px;
+}
+
+div.Pagination button{
+	height:20px;
+	color:#003366;
+}
+
+#buttonPanel {
+	padding:1px;
+	width:100%;
+	height:30px;
+	line-height:30px;
+	text-align:left;
+	text-indent:5px;
+	margin:5px 0 5px 0;
+}
+
+#headPanel{
+	margin:5px;
+	font-size: 18px;
+	font-weight:700;
+	background:#3961ad;
+	color:#FFFFFF;
+	height:30px;
+	line-height:30px;
+	text-indent:10px;
+	width:98%;
+	text-align: left;
+}
+
+#tableContainer thead.fixedHeader tr{
+	background:#DDDDDD;
+} 
+
+#tableContainer thead.fixedHeader tr th{
+	height:30px;
+}
+
+#bodyContent div span {
+	maring:5px auto 5px auto;
+}
+
+#bodyContent div label {
+	width:120px;
+	font-weight:bold;
+	text-align:right;
+	padding-right:5px;
+	maring:5px auto 5px auto;
+}
+
+#SubPanel {
+}
+
+.red, .main_sort_red_cls {
+	color:#f00;
+	margin-left:3px;
+}
+
+#bodyContent{
+	padding:10px;
+}
+
+#bodyContent div {
+	border-bottom: 1px solid #ccc;
+	line-height:160%;
+	vertical-align:middle;
+	padding:5px auto 5px auto;
+	min-height:30px;
+}
+
+.admin_btn {
+	cursor:hand;
+	color:#ca0000;
+}
+
+.admin_btn_b {
+	cursor:hand;
+	color:#003399;
+}
+
+.admin_view {
+	cursor:hand;
+	color:green;
+}

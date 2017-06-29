@@ -1,0 +1,212 @@
+/*
+	CSS style code
+	Design  by µ³µ³
+	QQ:19610767
+*/
+
+*{
+	font-size:12px;
+}
+.Button{
+	font-size:12px;
+}
+
+body {
+	margin:0 auto;
+	margin:0 auto !important;
+	*margin:0 auto;
+	padding:0 auto;
+	padding:0 auto !important;
+	*padding:0 auto;
+	text-align:center;
+	text-align:center !important;
+	*text-align:center;
+	background:url(images/body-bg.jpg) no-repeat center top;
+	background-repeat:no-repeat;
+	background-repeat:repeat-x;
+}
+
+from {
+	margin:0;
+	margin:0 !important;
+	*margin:0;
+	padding:0;
+	padding:0 !important;
+	*padding:0;
+}
+
+ul {
+	margin:0;
+	margin:0 !important;
+	*margin:0;
+	padding:0;
+	padding:0 !important;
+	*padding:0;
+}
+
+a{text-decoration: none;color: #222222; }
+a:link {color: #222222; text-decoration: none;}
+a:visited {color: #222222; text-decoration: none;}
+a:active {text-decoration: none;}
+a:hover {border:0; color:#003399; text-decoration: underline;}
+
+.IsNull {
+	color:#FF0000;
+	height:20px;
+	margin:0 15px 0 5px;
+	margin:0 15px 0 5px !important;
+	*margin:0 15px 0 5px;
+}
+#xScroll{width:950px;height:30px; line-height:30px;border:#ccc 1px solid;overflow:hidden; margin:5px auto 5px auto; text-align:left; background:#ddd;}
+#xScroll a{font-weight:700; color:red; font-size:16px;}
+#xScroll a:hover{ text-decoration:underline;}
+/*---------head-----------------*/
+#foot {
+	width:950px;
+	margin:0 auto;
+	height:120px;
+	text-align:center;
+	color:#333;
+	background:url(images/footer.jpg) center top no-repeat;
+}
+
+#foot a{
+	color:#333;
+}
+
+#foot a:hover{
+	color:#000;
+	text-decoration:underline;
+}
+
+.footlink {
+	line-height:23px;
+	margin:auto 5px auto 5px;
+}
+
+.indexpicdiv {
+	border:solid 1px #ccc;
+	width:240px;
+	height:150px;
+	padding-top:5px;
+	margin-left:5px;
+}
+.index-news-top {
+	background:url(images/title.png) no-repeat left center;
+	text-align:left;
+	padding-left:20px;
+	line-height:25px;
+	height:25px;
+	font-weight:700;
+}
+.index-news-bottom {
+	border:solid 1px #ccc;
+}
+
+#serviceTab img {
+	border:none;
+}
+
+.index-news-bottom td {
+	border-bottom: dotted 1px #ccc;
+}
+.index-news-bottom .indexnews {
+	text-align:left;
+	background:url(images/point.gif) no-repeat left center;
+	text-indent:20px;
+	left:32px;
+	height:32px;
+	border-bottom: dotted 1px #ccc;
+}
+
+.indexnews a{
+}
+
+.indexnews a:hover{
+	color:red;
+}
+
+.leftnav-contact {
+	height:22px;
+	text-indent:18px;
+	text-align:left;
+}
+/*-------------page--------*/
+.pagetab {
+	width:950px;
+}
+
+.page-left-title {
+	background:url(images/left.jpg) no-repeat center top;
+	height:50px;
+	line-height:50px;
+	text-indent:30px;
+	text-align:left;
+}
+
+.left-li {
+	background:url(images/point.jpg) no-repeat 30px center;
+	height:30px;
+	line-height:30px;
+	text-align:left;
+	text-indent:50px;
+	border-bottom:dotted 1px #eee;
+}
+
+.left-li a {
+
+}
+
+.pageright {
+	text-align:left;
+	padding:0;
+	min-height:500px;
+	width:760px;
+}
+
+.page-title {
+	background:url(images/page-title.jpg) no-repeat left center;
+	height:45px;
+	line-height:45px;
+	overflow:hidden;
+}
+.page-title .title{
+	text-indent:30px;
+	color:#666;
+	background:none;
+	font-weight:700;
+}
+
+.page-title .addnav{
+	color:#369;
+	font-size:12px;
+	text-align:right;
+	width:400px;
+	padding-right:40px;
+}
+.page-title .addnav a{
+	color:#369;
+}
+
+.page-title .addnav a:hover{
+	color:black;
+	text-decoration:none;
+}
+
+.page-main {
+	text-align:left;
+	line-height:160%;
+	padding:10px 20px 10px 20px;
+	overflow:hidden;
+	border:solid 1px #eee;
+	margin-left:10px;
+	min-height:500px;
+}
+.newlisttr td{
+	line-height:25px;
+	border-bottom:dotted 1px #CCCCCC;
+}
+.newlisttr .hover{
+	background:url(images/point.gif) no-repeat left center;
+	text-indent:20px;
+}
