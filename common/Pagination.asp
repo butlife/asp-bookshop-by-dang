@@ -23,7 +23,7 @@
 		strHtml = strHtml & "}" & vbCrLf
 		strHtml = strHtml & "</script>" & vbCrLf
 		strHtml = strHtml & "" & vbCrLf
-		strHtml = strHtml & "<table cellspacing=""0"" cellfillding=""0"" align=""center"">" & vbCrLf
+		strHtml = strHtml & "<table cellspacing=""0"" cellfillding=""0"" border=""0"" align=""center"" class=""pageTable"">" & vbCrLf
 		strHtml = strHtml & "<input type=""hidden"" name=""Query"" value=""" & strQuery & """>" & vbCrLf
 		strHtml = strHtml & "<input type=""hidden"" name=""Page"" value="""">" & vbCrLf
 		strHtml = strHtml & "<tr class=""ListPager"">" & vbCrLf

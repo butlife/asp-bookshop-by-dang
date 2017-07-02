@@ -2,7 +2,7 @@
 	'=========================在网站运行前，请先修改以下信息=========================
 	
 	'网站安装目录，相对于根目录
-	gstrInstallDir = "/site/book/"
+	gstrInstallDir = "/"
 	gstrKeyWords = "网上借书系统"
 	gstrdescription = ""
 	gstrServiceTel = "0372110"
@@ -16,6 +16,7 @@
 	glngSessionTimeout = 20
 	'网格每页显示数据行数
 	glngPageSize = 20
+	glngPageSize_phone = 10
 	
 	'网站名称
 	gstrSiteName = "网上借书系统"

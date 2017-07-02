@@ -63,7 +63,7 @@
 			rsUser.Open strSql, conn, 1, 1
 			
 			If Not(rsUser.Eof Or rsUser.Bof) Then
-				strMsg = "帐号己存在!" & strSql
+				strMsg = "帐号己存在!"
 				adminsave = False
 				If rsUser.State = 1 Then rsUser.Close
 				Set rsUser = Nothing

@@ -50,6 +50,8 @@
 	end if
 	if rsUser.state = 1 then rsUser.close
 	set rsUser = nothing
+	
+	Call CloseConn()
 %>
 {
     "state": "<%=lngstate%>",

@@ -14,53 +14,91 @@
 <script language="javascript" type="text/javascript">
 function Body_Load(){
 }
+
+function search() {
+	var formMain = document.forms[0];
+	formMain.action = "#";
+	formMain.submit();
+}
+
+function btnManyDelete_Click(){
+	var oCltNAMEs = document.getElementsByName('CHK');
+	var bPass = false;
+	var DelConunt = 0;
+	for(var i=0; i<oCltNAMEs.length; i++) {
+		var oCltState = oCltNAMEs[i].checked;
+		if (oCltState == true) {
+			DelConunt= DelConunt+1;
+			bPass = true;
+		}
+		
+	}
+	if (bPass == false) {
+		alert("请选中要准备 【删除】 的记录!");
+		return false;
+	}
+	//删除的总条数
+	//提交到删除页
+	if(confirm("【删除】 记录将不能恢复,继续吗?")) {
+		document.forms[0].action="manyaction.asp?type=manyDelete";
+		document.forms[0].submit();
+	}
+}
+
+function btnManySend_Click(){
+	var oCltNAMEs = document.getElementsByName('CHK');
+	var bPass = false;
+	var DelConunt = 0;
+	for(var i=0; i<oCltNAMEs.length; i++) {
+		var oCltState = oCltNAMEs[i].checked;
+		if (oCltState == true) {
+			DelConunt= DelConunt+1;
+			bPass = true;
+		}
+		
+	}
+	if (bPass == false) {
+		alert("请选中要准备【发货】的记录!");
+		return false;
+	}
+	//删除的总条数
+	//提交到删除页
+	if(confirm("确定【发货】吗？此操作不可恢复,继续吗?")) {
+		document.forms[0].action="manyaction.asp?type=manySend";
+		document.forms[0].submit();
+	}
+}
+
+
 </script>
 </head>
 <body onLoad="Body_Load();">
-<form action="" method="post" name="form1">
-  <div id="headPanel">信息列表</div>
+<form action="#" method="post" name="form1">
+    <input type="hidden" name ="main" id="main" value="0" />
+  <div id="headPanel">订单列表</div>
   <div id="buttonPanel">
-    <a class="aButton" href="add.asp">信息添加</a>
-    <a class="aButton" style="cursor:pointer;" onClick="AllDelete('CHK');">批量删除</a>
+    <input type="button" class="Button" onClick="btnManySend_Click();" value="批量发货" />
+    <input type="button" class="Button" onClick="btnManyDelete_Click();" value="批量删除" />
+    <span class="red">||</span>
+    <a class="" href="main.asp">已下单</a>
+    <a class="" href="main1.asp">已发货</a>
+    <a class="" href="main2.asp">待收回</a>
+    <a class="" href="main3.asp">己完结</a>
+    <span class="red">||</span>
 <%
-	Dim lngInfoID, strtitle, bispassed, dtmakedate, strsortname, stradminname, ihit, strauthor, bistop, iorder, strKeyWords, strpicurl
-	Dim rsInfo, i, strSql, strQuery, lngSortId
+	Dim lngInfoID, strtitle, strKeyWords, lngShopID, lnguserId, strUseracc, strusername, strusertel, strAdddate, lngshopState
+	Dim rsShop, i, strSql, strQuery
 	Dim lngPageSize, lngPageCount, lngCurrPage, lngRecordCount, bPagination
-	
-	lngSortId = ConvertDouble(Request("SortId") & "")
+	dim strUserKeyWords, strBookKeyWords
+
+	strUserKeyWords = trim(request("UserKeyWords") & "")
+	strBookKeyWords = trim(request("BookKeyWords") & "")
 	strQuery = Trim(Request("Query") & "")
 	
-	sortlist(lngSortId)
-	
-	Function sortlist(sortid)
-		sortid = ConvertDouble(sortid & "")
-		Dim rsSort, strSql, strsortname, lngsortid
-		set rssort = server.CreateObject("adodb.recordset")
-		strsql = " select * from infosort_t "
-		if rssort.state = 1 then rssort.close
-		rssort.open strsql, conn, 1,1
-		if not(rssort.bof or rssort.eof) then
-			response.write "<a href='main.asp'"
-			if (sortid = 0) Then
-				response.write " class=""main_sort_red_cls"""
-			end if
-				response.write ">全部"
-			response.write "</a> &nbsp;&nbsp;"
-			do while not(rssort.bof or rssort.eof)
-				response.write "<a href='main.asp?sortid=" & ConvertDouble(rssort("sortid")& "") & "' "
-				if (sortid = ConvertDouble(rssort("sortid")& "")) Then
-					response.write " class=""main_sort_red_cls"""
-				end if
-				response.write ">"
-				response.write trim(rssort("sortname")& "")
-				response.write "</a> &nbsp;&nbsp;"
-				rssort.movenext
-			loop
-		Else
-			response.write "暂无类别"
-		end if
-	end function
 %>
+	会员名或手机：<input type="text" name="UserKeyWords" id="UserKeyWords" value="<%=strUserKeyWords%>" size="15" />
+	书名：<input type="text" name="BookKeyWords" id="BookKeyWords" value="<%=strBookKeyWords%>" size="15" />
+	<input type="button" onClick="search();" value="查询">
   </div>
   <div id="contentPanel">
     <div id="tableContainer" class="tableContainer">
@@ -69,38 +107,41 @@ function Body_Load(){
           <tr>
             <th nowrap="nowrap" width="35">&nbsp;</th>
             <th nowrap="nowrap"><input name="MAINCHK" id="MAINCHK" type="checkbox" value="" onClick="cheageBox('MAINCHK','CHK');"></th>
-            <th nowrap="nowrap">标题</th>
-            <th nowrap="nowrap">类别</th>
-            <th nowrap="nowrap">审核|置顶</th>
-            <th nowrap="nowrap">图片</th>
-            <th nowrap="nowrap">更新时间</th>
-            <th nowrap="nowrap">操作</th>
+            <th nowrap="nowrap">姓名</th>
+            <th nowrap="nowrap">帐号</th>
+            <th nowrap="nowrap">手机</th>
+            <th nowrap="nowrap">订单书本</th>
+            <th nowrap="nowrap">下单时间</th>
+            <th nowrap="nowrap">状态</th>
+            <!--<th nowrap="nowrap">操作</th>-->
           </tr>
         </thead>
         <tbody class="scrollContent">
 <%
 		
-		If Trim(strQuery) = "" Then
-			lngSortId = ConvertDouble(Request("SortId") & "")		
-			
+'		If Trim(strQuery) = "" Then
 			strQuery = " Where 1 = 1 "
-				If lngSortId <> 0 Then
-					strQuery = strQuery & " And SortId = " & lngSortId
-				End If
-		Else
-			strQuery = outHTML(strQuery)
-		End If
-		Set rsInfo = Server.CreateObject("ADODB.RecordSet")
-		strSql = "Select * From info_v " & strQuery & " Order By istop desc, ispassed desc, iorder desc, infoid desc "
-		rsInfo.Open strSql, conn, 1, 1
+			If strUserKeyWords <> "" Then
+				strQuery = strQuery & " And (username like '%" & strUserKeyWords & "%' or useracc like '%" & strUserKeyWords & "%' or userTel like '%" & strUserKeyWords & "%')"
+			End If
+			
+			If strBookKeyWords <> "" Then
+				strQuery = strQuery & " And (title like '%" & strBookKeyWords & "%' or content like '%" & strBookKeyWords & "%')"
+			End If
+'		Else
+'			strQuery = outHTML(strQuery)
+'		End If
+		Set rsShop = Server.CreateObject("ADODB.RecordSet")
+		strSql = "Select * From shop_v " & strQuery & " Order By userId, shopId asc "
+		rsShop.Open strSql, conn, 1, 1
 		
-		If Not (rsInfo.Bof Or rsInfo.Eof) Then
+		If Not (rsShop.Bof Or rsShop.Eof) Then
 			bPagination = True
 			'分页
 			lngPageSize = glngPageSize
-			lngRecordCount = rsInfo.RecordCount
-			rsInfo.PageSize = lngPageSize
-			lngPageCount = rsInfo.PageCount
+			lngRecordCount = rsShop.RecordCount
+			rsShop.PageSize = lngPageSize
+			lngPageCount = rsShop.PageCount
 			If ConvertLong(Request("Page") & "") <> 0 Then
 				lngCurrPage = CLng(Request("Page") & "")
 			Else
@@ -108,24 +149,22 @@ function Body_Load(){
 			End If
 			If lngCurrPage <= 1 Then lngCurrPage = 1
 			If lngCurrPage >= lngPageCount Then lngCurrPage = lngPageCount
-			rsInfo.AbsolutePage = lngCurrPage
+			rsShop.AbsolutePage = lngCurrPage
 			
 			i = 0
 			
-			Do While Not (rsInfo.Bof Or rsInfo.Eof) 
+			Do While Not (rsShop.Bof Or rsShop.Eof) 
 
-				lngInfoID = ConvertDouble(rsInfo("InfoID") & "")
-				strtitle = trim(rsInfo("title") & "")
-				bispassed = ConvertDouble(rsInfo("ispassed") & "")
-				bistop = ConvertDouble(rsInfo("istop") & "")
-				dtmakedate = Format_Time(rsInfo("makedate"),7)
-				strsortname = Trim(rsInfo("sortname") & "")
-				stradminname = Trim(rsInfo("adminname") & "")
-				ihit = ConvertDouble(rsInfo("hit") & "")
-				'strauthor = Trim(rsInfo("author") & "")
-				iorder = ConvertDouble(rsInfo("iorder") & "")
-				'strKeyWords = Trim(rsInfo("KeyWords") & "")
-				strpicurl = Trim(rsInfo("picurl") & "")
+				lngShopID = ConvertLong(rsShop("ShopID") & "")
+				lngInfoID = ConvertLong(rsShop("InfoID") & "")
+				lnguserId = ConvertLong(rsShop("userId") & "")
+				strtitle = trim(rsShop("title") & "")
+				strUseracc = trim(rsShop("Useracc") & "")
+				strusername = trim(rsShop("username") & "")
+				strusertel = trim(rsShop("usertel") & "")
+				strAdddate = Format_Time(rsShop("Adddate"),6)
+				lngshopState = ConvertLong(rsShop("shopState") & "")
+				
 				If i Mod 2 = 0 Then	
 					Response.Write "<tr class=""ListItem"">" & vbCrLf
 				Else
@@ -133,45 +172,43 @@ function Body_Load(){
 				End If
 		
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & ((lngCurrPage - 1) * lngPageSize + i + 1) & "</td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""center""><input name=""CHK"" id=""CHK"" type=""checkbox"" value=""" & lngInfoId & """></td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""left"">" & TdString(strtitle) & "</td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strsortname) & "</td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""center"">" & getState(bispassed) & "|" & getState(bistop) & "</td>" & vbCrLf
-				if strpicurl = "" then
-					Response.Write "<td nowrap=""nowrap"" align=""center"">&nbsp;</td>" & vbCrLf
-				else
-					Response.Write "<td nowrap=""nowrap"" align=""center""><a href=""../../uppic/big/" & strpicurl & """ target=""_blank"">图片</a></td>" & vbCrLf
-				end if
-				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(dtmakedate) & "</td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""center"">" & vbCrLf
-				Response.Write "<a class='admin_btn' href='modify.asp?Id=" & lngInfoID & "'>修改</a>" & vbCrLf
-				If (bistop = 1) Then
-					Response.Write "<a class='admin_btn_b' href='action.asp?type=top&tbId=" & lngInfoID & "'>解除</a>" & vbCrLf
-				Else
-					Response.Write "<a class='admin_btn' href='action.asp?type=top&tbId=" & lngInfoID & "'>置顶</a>" & vbCrLf
-				End If
-				Response.Write "<a class='admin_btn' href='action.asp?type=delete&tbId=" & lngInfoID & "'>删除</a>" & vbCrLf
-				Response.Write "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center""><input name=""CHK"" id=""CHK"" type=""checkbox"" value=""" & lngShopID & """></td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strusername) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strUseracc) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strusertel) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strtitle) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strAdddate) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"">" & getState(lngshopState) & "</td>" & vbCrLf
+'				Response.Write "<td nowrap=""nowrap"" align=""center"">" & vbCrLf
+'				Response.Write "<a class='admin_btn' href='action.asp?type=Send&tbId=" & lngInfoID & "'>发货</a>" & vbCrLf
+'				Response.Write "<a class='admin_btn' href='action.asp?type=delete&tbId=" & lngInfoID & "'>删除</a>" & vbCrLf
+'				Response.Write "</td>" & vbCrLf
 				Response.Write "</tr>" & vbCrLf
 				
 				i = i + 1
-				rsInfo.MoveNext
+				rsShop.MoveNext
 				If i >= lngPageSize Then Exit Do
 			Loop
 		End If
 		
-		If rsInfo.State = 1 Then rsInfo.Close
-		Set rsInfo = Nothing
+		If rsShop.State = 1 Then rsShop.Close
+		Set rsShop = Nothing
 		
 	function getState(i)
 		dim strRe
 		i = trim(i & "")
 		select case i
 			case "0"
-			strRe = "<span style=""color:red; font-weight:bold;"">&times;</span>"
+			strRe = "<span style=""color:red; font-weight:bold;"">下单待发货</span>"
 			
 			case "1"
-			strRe = "<span style=""color:green; font-weight:bold;"">&radic;</span>"
+			strRe = "<span style=""color:green;"">送书待归还</span>"
+			
+			case "2"
+			strRe = "<span style=""color:blue; font-weight:bold;"">归还待确认</span>"
+			
+			case "3"
+			strRe = "<span style="""">己还书完结</span>"
 			
 			case else
 			strRe = ""
@@ -196,5 +233,20 @@ function Body_Load(){
 </body>
 </html>
 <%
+	function getSortName(tab, id)
+		dim rsSort, strsortSql, strRe
+		strRe = "&nbsp;"
+		Set rsSort = Server.CreateObject("ADODB.RecordSet")
+		id = ConvertLong(id & "")
+		strsortSql = "Select sortname From " & tab & " where sortid =  " & id
+		rsSort.Open strsortSql, conn, 1, 1
+		if not(rsSort.bof or rsSort.eof) then
+			strRe = trim(rsSort("sortname")&"")
+		end if
+		If rsSort.State = 1 Then rsSort.Close
+		Set rsSort = Nothing
+		getSortName = strRe
+	end function
+	
 	Call CloseConn()
 %>

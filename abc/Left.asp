@@ -45,20 +45,19 @@ a:hover, a:* {
 <body>
 <div style="font-size:14px; text-align:center;">欢迎 <span style="color:#CA0000;"><%= request.cookies(gstrSessionPrefix & "adminname")%></span> 登陆.</div>
 <hr>
-<div style="font-size:14px; text-align:center; font-weight:bold; height:40px; padding-top:15px;">数据管理</div>
 <div id="#left_logo">
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>Orders/Main.asp" target="main">订单管理</a></div>
+  <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>user/Main.asp" target="main">会员管理</a></div>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>info/Main.asp" target="main">图书管理</a></div>
+  <br>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>infosort_NL/Main.asp" target="main">年龄类别管理</a></div>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>infosort_ZT/Main.asp" target="main">主题类别管理</a></div>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>infosort_XL/Main.asp" target="main">系列类别管理</a></div>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>infosort_FM/Main.asp" target="main">父母类别管理</a></div>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>infosort_CBS/Main.asp" target="main">出版社类别管理</a></div>
-  <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>user/Main.asp" target="main">会员管理</a></div>
-  <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>about/Main.asp" target="main">站点管理</a></div>
+  <br>
+  <!--<div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>about/Main.asp" target="main">站点管理</a></div>-->
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrAdminPanelUrl%>manager/Main.asp" target="main">管理员管理</a></div>
-  <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="<%=gstrInstallDir%>" target="_parent">返回主页</a></div>
-  <hr>
   <div class="logo" onMouseOver="this.className='logo_Mover';" onMouseOut="this.className='logo';"><a href="Logout.asp" target="_parent">退出系统</a></div>
 </div>
 </body>

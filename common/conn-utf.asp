@@ -9,7 +9,7 @@
 	Const DATABASE_MSSQL = 2
 	
 	'页全局变量区
-	Dim gstrSiteName, gstrSiteTitle, gstrLogoUrl, gstrBannerUrl, gstrKeyWords, gstrdescription,gstrServiceTel
+	Dim gstrSiteName, gstrSiteTitle, gstrLogoUrl, gstrBannerUrl, gstrKeyWords, gstrdescription,gstrServiceTel, glngPageSize_phone
 	Dim gstrWebmasterName, gstrWebmasterEmail, gstrCopyright
 	Dim gstrSiteUrl, gstrInstallDir, glngSessionTimeout, glngPageSize, gstrNoPicUrl, gstrNoFriendLinkPicUrl, gstrNoFriendLink
 	Dim gstrPicFolderUrl, gstrFileFolderUrl, gstrNewsFolderUrl, gstrAdminPanelUrl, gstrUserPanelUrl

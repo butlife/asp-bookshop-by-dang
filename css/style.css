@@ -61,10 +61,18 @@ a:hover {
 }
 
 div.Pagination {
-	width:90%;
+	width:100%;
 	text-align:center;
 	line-height:30em;
 	height:30px;
+}
+.pageTable td{
+	width:200px;
+	text-align:center;
+	height:30px;
+}
+div.Pagination .pageTable td{
+	white-space:nowrap;
 }
 
 div.Pagination button{
