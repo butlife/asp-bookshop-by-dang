@@ -10,6 +10,10 @@
     <!--#include file="common/safe.asp"-->
     <title>网上书城-书库-<%=gstrKeyWords%></title>
 
+
+    <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link href="<%=gstrInstallDir%>bootstrap337/css/bootstrap.min.css" rel="stylesheet">
@@ -32,99 +36,183 @@
         dim strKeyWords, lngSortId
         strKeyWords = trim(request("bookKeyWords") & "")
         lngSortId = ConvertLong(request("SortId") & "")
-        
     %>
     <body style="padding-top:50px;">
         <!--#include file="header.asp"-->
-        <div class="container">
-            <form class="form-booklist" id="form-booklist" method="post">
-                <input type="hidden" name="sortid" id="sortid" value="<%=lngSortId%>" />
-                <div class="row" style="margin-bottom:10px;">
+        <div class="container" id="app">
+            <div class="row" style="margin-bottom:10px;">
                     <div class="col-xs-12">
                         <div class="input-group">
-                            <input type="text" class="form-control" name="bookKeyWords" value="<%=strKeyWords%>" id="bookKeyWords" placeholder="输入关键字...">
+                            <input type="text" class="form-control" name="bookKeyWords" v-model='search_text' id="bookKeyWords" placeholder="输入关键字...">
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" id="booklist-search-btn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索</button>
+                                <button class="btn btn-primary" type="button" id="booklist-search-btn" @click='load_book'>
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
+                                </button>
                             </span>
                         </div>
                     </div>
                 </div>
-            </form>
 
-            <div id="gvBooks" class="row">
-
+            <div id="gvBooks" class="row" v-load-more="load_more">
+                <div class="col-xs-6" v-for="(item, index) in booklist">
+                    <div class="thumbnail">
+                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" alt="{{item.title}}" class="img-responsive img-rounded shopbook-img" />
+                        <h4 class="text-center">{{item.title}}</h4>
+                        <p class="text-right">
+                            <button class="btn btn-success btn-xs fav-btn" infoid="{{item.infoId}}" role="button" @click="fav_click(index)">
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{item.fav == '1' ? '己收藏' : '收藏'}}</button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /container -->
         <!--#include file="footer.asp"-->
-        <script id="tplItem" type="text/x-jsrender">
-            <div class="col-xs-6">
-                <div class="thumbnail">
-                    <img src="<%=gstrInstallDir%>uppic/big/{{:picurl}}" alt="{{:title}}" class="img-responsive img-rounded shopbook-img" />
-                    <h4 class="text-center">{{:title}}</h4>
-                    <p class="text-right"><a href="#" class="btn btn-success btn-xs fav-btn" infoid="{{:infoId}}" role="button"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> 收藏</a></p>
-                </div>
-            </div>
-        </script>
 
         <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="//cdn.bootcss.com/jsrender/1.0.0-rc.70/jsrender.min.js"></script>
         <script src="<%=gstrInstallDir%>bootstrap337/dropload/dropload.min.js"></script>
-        <script>
-            var isLoadEnd = false;
-            var searchParams = {
-                PageNum: -1
-            };
-            loadBooks();
+        <script>			
             $(function () {
-            
-                $('#nav-userinfo').click(function () { location.href = 'main.asp'; });
-                $('#booklist-search-btn').click(function () {
-                    isLoadEnd = false;
-                    searchParams = $('#form-booklist').serialize();
-                    searchParams.PageNum = -1;
-            
-                    loadBooks();
-                });
-            
-                $('.container').dropload({
-                    scrollArea: window,
-                    loadDownFn: function (me) {
-                        loadBooks().always(function(){
-                            me.resetload();  
-                        });
-                    }
-                });
+                $('#nav-userinfo').click(function () { location.href = 'main.asp'; });            
             });
             
-            function loadBooks(dropload) {
-                searchParams.PageNum++;
-            
-                return $.ajax({
-                    url: 'service/bookshop.asp',
-                    data: searchParams,
-                    dataType: 'json',
-                    type: 'post'
-                }).done(function(data) {
-                    if (data.state == 0) {
-                        var html = $('#tplItem').render(data.body);
-                        $('#gvBooks').empty();
-                        $('#gvBooks').append(html);
-            
-                        isLoadEnd = true; // ???? 考虑怎么判断。
-                    } else {
-                        if(dropload) {
-                            dropload.lock();
-                            dropload.noData();
-                        }
-                    }
-                }).fail(function(error) {
-                    alert('出错了' + error);
-                    console.log(error);
-                    return false;
-                });
-            }
+        </script>
+        <script type="text/javascript">
+            Vue.use(VueResource);
+            Vue.http.options.emulateJSON = true;
+
+            const getStyle = (element, attr, NumberMode = 'int') => {
+    let target;
+    // scrollTop 获取方式不同，没有它不属于style，而且只有document.body才能用
+    if (attr === 'scrollTop') { 
+        target = element.scrollTop;
+    }else if(element.currentStyle){
+        target = element.currentStyle[attr]; 
+    }else{ 
+        target = document.defaultView.getComputedStyle(element,null)[attr]; 
+    }
+    //在获取 opactiy 时需要获取小数 parseFloat
+    return  NumberMode == 'float'? parseFloat(target) : parseInt(target);
+}
+
+            var app = new Vue({
+                el:'#app',
+                created:function(){
+                    console.log('app created');
+                    this.load_book();
+                },
+                data:{
+                    booklist:[],
+                    sortid:'<%=lngSortId%>',
+                    search_text:'<%=strKeyWords%>',
+                    current_page:-1,
+                    max_page:10,
+                    loading:false,
+                },
+                methods:{
+                    load_book:function(){
+                        let vm = this;
+                        vm.$http.post('service/bookshop.asp', {PageNum:vm.current_page, bookKeyWords:vm.search_text, PageNum:vm.current_page}).then(function(response){
+                            response.json().then(function(json){
+                                console.log('bookshop.asp', json);
+                                if(json.state == 0){
+                                    if(vm.current_page == -1){
+                                        vm.booklist = json.body;
+                                    }else{
+                                        vm.booklist = vm.booklist.concat(json.body);
+                                    }
+                                }
+                                vm.loading = false;
+                            });
+                        });
+                    },
+                    fav_click:function(index){
+                        console.log('fav_click', index, this.booklist[index]);
+                        let vm = this;
+                        vm.$http.post('service/bookfav-insert.asp', {InfoId:vm.booklist[index].infoId, fav:vm.booklist[index].fav}).then(function(response){
+                            response.json().then(function(json){
+                                console.log('bookfav-insert.asp', json);
+                                if(json.state == 0 || true){
+                                    vm.booklist[index].fav = '1';
+                                }
+                            });
+                        });
+                    },
+                    load_more:function(){
+                        if(!this.loading){
+                            if(this.current_page < this.max_page){
+                                this.loading = true;
+                                this.current_page++;
+                                this.load_book();
+                            }
+                        } 
+                    },
+                },
+                directives: {
+		'load-more': {
+			bind: (el, binding) => {
+				let windowHeight = window.screen.height;
+				let height;
+				let setTop;
+				let paddingBottom;
+				let marginBottom;
+				let requestFram;
+				let oldScrollTop;
+				let scrollEl;
+				let heightEl;
+				let scrollType = el.attributes.type && el.attributes.type.value;
+				let scrollReduce = 2;
+				if (scrollType == 2) {
+					scrollEl = el;
+					heightEl = el.children[0];
+				} else {
+					scrollEl = document.body;
+					heightEl = el;
+				}
+
+				el.addEventListener('touchstart', () => {
+					height = heightEl.clientHeight;
+					if (scrollType == 2) {
+						height = height
+					}
+					setTop = el.offsetTop;
+					paddingBottom = getStyle(el, 'paddingBottom');
+					marginBottom = getStyle(el, 'marginBottom');
+				}, false)
+
+				el.addEventListener('touchmove', () => {
+					loadMore();
+				}, false)
+
+				el.addEventListener('touchend', () => {
+					oldScrollTop = scrollEl.scrollTop;
+					moveEnd();
+				}, false)
+
+				function moveEnd () {
+					requestFram = requestAnimationFrame(() => {
+						if (scrollEl.scrollTop != oldScrollTop) {
+							oldScrollTop = scrollEl.scrollTop;
+							moveEnd()
+						} else {
+							cancelAnimationFrame(requestFram);
+							height = heightEl.clientHeight;
+							loadMore();
+						}
+					})
+				}
+
+				function loadMore() {
+					if (scrollEl.scrollTop + windowHeight >= height + setTop + paddingBottom + marginBottom - scrollReduce) {
+						binding.value();
+					}
+				}
+			}
+		}
+	}
+            });
+
         </script>
     </body>
 </html>

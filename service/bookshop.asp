@@ -10,7 +10,6 @@
 	lngSortId = ConvertLong(request("SortId") & "")
 	lngPageNum = ConvertLong(request("PageNum") & "")
 	strbookKeyWords = trim(request("bookKeyWords") & "")
-	if lngPageNum = 0 then lngPageNum = 1
 	
 	strQuery = " where ispassed = 1 "
 	if lngSortId <> 0 then
@@ -20,10 +19,26 @@
 	if strbookKeyWords <> "" then
 		strQuery = strQuery & " and (title like '%" & strbookKeyWords & "%' or content like '%" & strbookKeyWords & "%')"
 	end if
-	%>
+
+	Set rsBook = Server.CreateObject("ADODB.RecordSet")
+'	strsql = "select Title, InfoId, PicUrl from info_t " & strQuery & " order by istop desc, iorder desc"
+	strsql = "select Title, InfoId, PicUrl from info_t " & strQuery & " order by infoid, title asc"
+	if rsBook.state = 1 then rs.close
+	rsBook.open strsql,conn,1,1
+	rsBook.pagesize = glngPageSize_phone
+
+	if lngPageNum > rsBook.PageCount then  
+		rsBook.AbsolutePage = rsBook.PageCount  
+	elseif lngPageNum <= 0 then  
+		lngPageNum = 1
+	else  
+		rsBook.AbsolutePage = lngPageNum   
+	end if  
+	lngPageNum = rsBook.AbsolutePage	
+%>
 {
     "state": 0,
-    "msg": "ok",
+    "msg": "success",
 	"data" :{
     	"sortid" : "<%=lngSortId%>",
         "bookKeyWords" : "<%=strbookKeyWords%>",
@@ -31,10 +46,6 @@
     },
     "body" : [
 <%
-	Set rsBook = Server.CreateObject("ADODB.RecordSet")
-	strsql = "select Title, InfoId, PicUrl from info_t " & strQuery & " order by istop desc, iorder desc"
-	if rsBook.state = 1 then rs.close
-	rsBook.open strsql,conn,1,1
 	if not(rsBook.bof or rsBook.eof) then
 		iCount=0
 		do while not (rsBook.bof or rsBook.eof)
@@ -45,18 +56,19 @@
         {
             "infoId" : "<%=lnginfoId%>",
             "title" : "<%=strTitle%>",
-            "picurl" : "<%=strpicurl%>"
+            "picurl" : "<%=strpicurl%>",
+			"fav":"0"
         }
 <%
 			iCount = iCount+1
 			rsBook.movenext
 
-            if not(rsBook.bof or rsBook.eof) and iCount < 10 then 
+            if not(rsBook.bof or rsBook.eof) and iCount < glngPageSize_phone then 
             'if not(rsBook.bof or rsBook.eof) then 
                response.write(",")
             end if
 
-			if iCount >= 10 then exit do
+			if iCount >= glngPageSize_phone then exit do
 		loop
 	end if
 %>
@@ -65,4 +77,6 @@
 <%
 	if rsBook.state = 1 then rsBook.close
 	set rsBook = nothing
+	
+	Call CloseConn()
 %>
