@@ -29,8 +29,8 @@
 %>
   <body style="padding-top:50px;">
 	<!--#include file="header.asp"-->
-    <div class="container">
-       <form class="form-myshopFav" id="form-myshopFav" method="post">
+    <div class="container" id="app">
+       <div class="form-myshopFav" id="form-myshopFav">
      <div class="panel panel-default">
       <div class="panel-heading">收藏夹</div>
       <div class="panel-body" style="padding:0;">
@@ -41,35 +41,10 @@
                         <th>收藏时间</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" name="favId" value="1"></td>
-                            <td>国王的新衣<span class="badge">4</span></td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="favId" value="2"></td>
-                            <td>国王的新衣<span class="badge">4</span></td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="favId" value="3"></td>
-                            <td>唐诗200首<span class="badge">4</span></td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="favId" value="4"></td>
-                            <td>国王的新衣<span class="badge">4</span></td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="favId" value="3"></td>
-                            <td>唐诗200首<span class="badge">4</span></td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="favId" value="4"></td>
-                            <td>国王的新衣<span class="badge">4</span></td>
-                            <td>2017/06/23</td>
+                        <tr v-for="(item, index) in list">
+                            <td><input type="checkbox" name="favId" v-bind:value="item.FavId"></td>
+                            <td>{{item.Title}}<span class="badge">{{item.icount}}</span></td>
+                            <td>{{item.FavDate}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -91,7 +66,7 @@
                 </div>
         </div>
       </div>
-      </form>
+      </div>
     </div>
     <!-- /container -->
 	<!--#include file="footer.asp"-->
@@ -99,7 +74,8 @@
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script>
+   
+ <script>
 		$(function() { 
 			$("#nav-userinfo").click(function(){location.href = "main.asp";});
 			//取消收藏
@@ -161,5 +137,37 @@
 			});
 		});
 	</script>
+
+     <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
+
+    <script type="text/javascript">
+        Vue.use(VueResource);
+        Vue.http.options.emulateJSON = true;
+
+        var app = new Vue({
+            el:'#app',
+            created:function(){
+                console.log('app created');
+                this.get_list();
+            },
+            data:{
+                list:[],
+            },
+            methods:{
+                get_list:function(){
+                    var vm = this;
+                    vm.$http.get('/service/myshopfav.asp').then(response => {
+                        response.json().then(json => {
+                            console.log(json);
+                            if(json.state == 0){
+                                vm.list = json.body;
+                            }
+                        });
+                    });
+                },
+            },
+        });
+    </script>
   </body>
 </html>

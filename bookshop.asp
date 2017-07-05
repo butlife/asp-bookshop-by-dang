@@ -20,7 +20,6 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link href="<%=gstrInstallDir%>bootstrap337/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%=gstrInstallDir%>bootstrap337/dropload/dropload.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -60,12 +59,26 @@
             <div id="gvBooks" class="row" v-load-more="load_more">
                 <div class="col-xs-6" v-for="(item, index) in booklist">
                     <div class="thumbnail">
-                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" alt="{{item.title}}" class="img-responsive img-rounded shopbook-img" />
+                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" alt="{{item.title}}" @click="showbox(index)" class="img-responsive img-rounded shopbook-img" />
                         <h4 class="text-center">{{item.title}}</h4>
                         <p class="text-right">
                             <button class="btn btn-xs fav-btn btn-success" infoid="{{item.infoId}}" role="button" @click="fav_click(index)">
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{item.fav == '0' ? '收藏' : '己收藏'}}</button>
                         </p>
+                    </div>
+                </div>
+            </div>
+
+             <div class="modal fade" id="modal_box" role="dialog">
+                <div class="modal-dilog" role=ducument>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">{{modalmsg.title}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{modalmsg.content}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,7 +88,6 @@
 
         <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="<%=gstrInstallDir%>bootstrap337/dropload/dropload.min.js"></script>
         <script>
             $(function() {
                 $('#nav-userinfo').click(function() {
@@ -101,6 +113,8 @@
                 return NumberMode == 'float' ? parseFloat(target) : parseInt(target);
             }
 
+            var modal = $('#modal_box').modal({show:false});
+
             var app = new Vue({
                 el: '#app',
                 created: function() {
@@ -114,6 +128,7 @@
                     current_page: -1,
                     max_page: 10,
                     loading: false,
+                    modalmsg:{title:'', content:''},
                 },
                 methods: {
                     load_book: function(search) {
@@ -159,6 +174,11 @@
                                 this.load_book();
                             }
                         }
+                    },
+                    showbox:function(index){
+                        var book = this.booklist[index];
+                        this.modalmsg = {title:book.title, content:book.content};
+                        modal.modal('show');
                     },
                 },
                 directives: {

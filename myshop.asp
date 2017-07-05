@@ -23,7 +23,7 @@
   </head>
   <body style="padding-top:50px;">
 	<!--#include file="header.asp"-->
-    <div class="container">
+    <div class="container" id="app">
        <form class="form-myshop" id="form-myshop" method="post">
       <div class="panel panel-default">
       <div class="panel-heading">正在借阅</div>
@@ -36,47 +36,14 @@
                         <th>下单时间</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#</td>
-                            <td>国王的新衣</td>
-                            <td>己下单</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td>#</td>
-                            <td>365夜</td>
-                            <td>己下单</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="2"></td>
-                            <td>国王的新衣</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="3"></td>
-                            <td>唐诗200首</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="4"></td>
-                            <td>国王的新衣</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="3"></td>
-                            <td>唐诗200首</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="4"></td>
-                            <td>国王的新衣</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
+                        <tr v-for="(item, index) in list">
+                            <td>
+                                <input type="checkbox" v-show="item.edit" name="shopid" v-bind:value="item.ShopId">
+                                <span v-show="!item.edit">#</span>
+                            </td>
+                            <td>{{item.Title}}</td>
+                            <td>{{item.shopStateName}}</td>
+                            <td>{{item.AddDate}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -130,5 +97,35 @@
 
 		});
 	</script>
+     <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
+<script>
+    Vue.use(VueResource);
+        Vue.http.options.emulateJSON = true;
+
+        var app = new Vue({
+            el:'#app',
+            created:function(){
+                console.log('app created');
+                this.get_list();
+            },
+            data:{
+                list:[],
+            },
+            methods:{
+                get_list:function(){
+                    var vm = this;
+                    vm.$http.get('/service/myshop.asp').then(response => {
+                        response.json().then(json => {
+                            console.log(json);
+                            if(json.state == 0){
+                                vm.list = json.body;
+                            }
+                        });
+                    });
+                },
+            },
+        });
+</script>
   </body>
 </html>

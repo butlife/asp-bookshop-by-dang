@@ -23,11 +23,11 @@
   </head>
   <body style="padding-top:50px;">
 	<!--#include file="header.asp"-->
-    <div class="container">
+    <div class="container" id="app">
      <div class="panel panel-default">
       <div class="panel-heading">借阅历史记录</div>
       <div class="panel-body" style="padding:0;">
-       <form class="form-myshop" id="form-myshop-log" method="post">
+       <div class="form-myshop" id="form-myshop-log">
             <table class="table table-striped">
                     <thead>
                         <th>#</th>
@@ -36,45 +36,15 @@
                         <th>送货时间</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>国王的新衣</td>
-                            <td>己归还</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>国王的新衣</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>唐诗200首</td>
-                            <td>己下单</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>国王的新衣</td>
-                            <td>己完结</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>唐诗200首</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>国王的新衣</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
+                        <tr v-for="(item, index) in list">
+                            <td>{{index+1}}</td>
+                            <td>{{item.Title}}</td>
+                            <td>{{item.iCount}}</td>
+                            <td>{{item.returnedDate}}</td>
                         </tr>
                     </tbody>
                 </table>
-          </form>
+          </div>
       </div>
     </div>   
     </div>
@@ -89,5 +59,35 @@
 			$("#nav-userinfo").click(function(){location.href = "main.asp";});
 		});
 	</script>
+    <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
+    <script type="text/javascript">
+        Vue.use(VueResource);
+        Vue.http.options.emulateJSON = true;
+
+        var app = new Vue({
+            el:'#app',
+            created:function(){
+                console.log('app created');
+                this.get_list();
+            },
+            data:{
+                list:[],
+            },
+            methods:{
+                get_list:function(){
+                    var vm = this;
+                    vm.$http.get('/service/myshop-log.asp').then(response => {
+                        response.json().then(json => {
+                            console.log(json);
+                            if(json.state == 0){
+                                vm.list = json.body;
+                            }
+                        });
+                    });
+                },
+            },
+        });
+    </script>
   </body>
 </html>
