@@ -59,27 +59,6 @@ function btnManyDelete_Click(frm){
 	}
 }
 
-function btnManySend_Click(frm){
-	var tempFrm = document.getElementsByName(frm)[0];
-	var bPass = false;
-	var tempChk = tempFrm.shopId;
-	for(var i=0; i<tempChk.length; i++) {
-		var oCltState = tempChk[i].checked;
-		if (oCltState == true) {
-			bPass = true;
-		}
-	}
-	if (bPass == false) {
-		alert("请选中要准备【发货】的记录!");
-		return false;
-	}
-	if(confirm("确定【发货】吗？此操作不可恢复,继续吗?")) {
-		//发货提交页
-		tempFrm.action="manyaction.asp?type=manySend";
-		tempFrm.submit();
-	}
-}
-
 function allchk(frm){
 	var tempFrm = document.getElementsByName(frm)[0];
 	var tempMainChk = tempFrm.mainchk;
@@ -93,10 +72,10 @@ function allchk(frm){
 </script>
 </head>
 <body onLoad="Body_Load();">
-  <div id="headPanel">己下单待发货-订单列表</div>
+  <div id="headPanel">己发货待归还-订单列表</div>
   <div id="buttonPanel">
 <form action="#" method="post" name="form1">
-    <input type="hidden" name ="main" id="main" value="0" />
+    <input type="hidden" name ="main" id="main" value="1" />
     <input type="hidden" name="Query" value="">
     <input type="hidden" name="Page" value="">
     <a class="" href="main.asp">已下单</a>
@@ -117,7 +96,7 @@ function allchk(frm){
 	strArruserId = "0"
 	
 '		If Trim(strQuery) = "" Then
-		strQuery = " Where shopstate = 0 "
+		strQuery = " Where shopstate = 1 "
 		If strUserKeyWords <> "" Then
 			strQuery = strQuery & " And (username like '%" & strUserKeyWords & "%' or useracc like '%" & strUserKeyWords & "%' or userTel like '%" & strUserKeyWords & "%')"
 		End If
@@ -213,7 +192,7 @@ function allchk(frm){
     <td colspan="3"><%=useradd%></td>
     </tr>
   <tr>
-    <td colspan="4"><%=getShopList(lnguserId,0)%></td>
+    <td colspan="4"><%=getShopList(lnguserId,1)%></td>
     </tr>
 </table>
 </form>    
@@ -252,7 +231,7 @@ function allchk(frm){
 		uid = ConvertLong(uid & "")
 		shopstate = ConvertLong(shopstate & "")
 		dim rsShopList, strshopsql, i
-		dim lngshopId, strTitle, strAdddate, lngshopstate, strState
+		dim lngshopId, strTitle, strAdddate, lngshopstate, strState, strSendDate
 		Set rsShopList = Server.CreateObject("ADODB.RecordSet")
 		strshopsql = "Select shopid, title, adddate, senddate, returneddate, finishdate, shopstate From shop_v where shopstate = " & shopstate & " and userid = " & uid
 		if rsShopList.state = 1 then rsShopList.close
@@ -261,7 +240,7 @@ function allchk(frm){
 		response.write "<tr>"
 		response.write "<th><input type=""checkbox"" name=""mainchk"" onClick=""allchk('userOrderFrm" & uid & "');"" /></th>"
 		response.write "<th>书名</th>"
-		response.write "<th>下单时间</th>"
+		response.write "<th>时间</th>"
 		response.write "<th>状态</th>"
 		response.write "<th style=""width:80px;"">操作</th>"
 		response.write "</tr>"
@@ -269,19 +248,18 @@ function allchk(frm){
 		do while not(rsShopList.bof or rsShopList.eof)
 			lngshopId = ConvertLong(rsShopList("shopId") & "")
 			strTitle = trim(rsShopList("Title") & "")
-			strAdddate = Format_Time(rsShopList("Adddate"),6)
+			strAdddate = Format_Time(rsShopList("adddate"),6)
+			strSendDate = Format_Time(rsShopList("SendDate"),6)
 			lngshopstate = ConvertLong(rsShopList("shopstate") & "")
 			strState = getState(lngshopstate)
 			response.write "<tr>"
 			response.write "<td><input type=""checkbox"" name=""shopId"" value=""" & lngshopId & """ /></td>"
 			response.write "<td>" & strTitle & "</td>"
-			response.write "<td>" & strAdddate & "</td>"
+			response.write "<td>" & strAdddate & " <span class=""red""> &gt; </span>" & strSendDate & "</td>"
 			response.write "<td>" & strState & "</td>"
 			if i = 0 then
 				response.write "<td rowspan=""9"" style=""text-align:center;"">"
 				
-				response.write "<input type=""button"" class=""Button"" onClick=""btnManySend_Click('userOrderFrm" & uid & "');"" value=""发货"" />"
-				response.write "<br><br>"
 				response.write "<input type=""button"" class=""Button"" onClick=""btnManyDelete_Click('userOrderFrm" & uid & "');"" value=""删除"" />"
 				
 				response.write "</td>"

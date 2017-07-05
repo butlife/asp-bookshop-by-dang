@@ -8,7 +8,7 @@
 	<!--#include file="common/conn-utf.asp"-->
     <!--#include file="common/Function-utf.asp"-->
     <!--#include file="common/safe.asp"-->
-    <title>正在借阅-<%=gstrKeyWords%></title>
+    <title>借阅历史记录-<%=gstrKeyWords%></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -24,75 +24,59 @@
   <body style="padding-top:50px;">
 	<!--#include file="header.asp"-->
     <div class="container">
-       <form class="form-myshop" id="form-myshop" method="post">
-      <div class="panel panel-default">
-      <div class="panel-heading">正在借阅</div>
+     <div class="panel panel-default">
+      <div class="panel-heading">借阅历史记录</div>
       <div class="panel-body" style="padding:0;">
-           <table class="table table-striped">
+       <form class="form-myshop" id="form-myshop-log" method="post">
+            <table class="table table-striped">
                     <thead>
                         <th>#</th>
                         <th>书名</th>
                         <th>状态</th>
-                        <th>下单时间</th>
+                        <th>送货时间</th>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>#</td>
+                            <td>1</td>
                             <td>国王的新衣</td>
-                            <td>己下单</td>
+                            <td>己归还</td>
                             <td>2017/06/23</td>
                         </tr>
                         <tr>
-                            <td>#</td>
-                            <td>365夜</td>
-                            <td>己下单</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="2"></td>
+                            <td>2</td>
                             <td>国王的新衣</td>
                             <td>己送货</td>
                             <td>2017/06/23</td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" name="shopid" value="3"></td>
+                            <td>3</td>
+                            <td>唐诗200首</td>
+                            <td>己下单</td>
+                            <td>2017/06/23</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>国王的新衣</td>
+                            <td>己完结</td>
+                            <td>2017/06/23</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
                             <td>唐诗200首</td>
                             <td>己送货</td>
                             <td>2017/06/23</td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" name="shopid" value="4"></td>
-                            <td>国王的新衣</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="3"></td>
-                            <td>唐诗200首</td>
-                            <td>己送货</td>
-                            <td>2017/06/23</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="shopid" value="4"></td>
+                            <td>6</td>
                             <td>国王的新衣</td>
                             <td>己送货</td>
                             <td>2017/06/23</td>
                         </tr>
                     </tbody>
                 </table>
-          </div>
-          <div class="panel-footer">  
-                <div class="row show-grid">
-                  <div class="col-xs-12 text-right">
-                      <button type="button" class="btn btn-info" id="returned-btn">
-                         <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
-                         申请归还
-                      </button>
-                  </div>
-                </div>
-          </div>
-        </div>
-      </form>
+          </form>
+      </div>
+    </div>   
     </div>
     <!-- /container -->
 	<!--#include file="footer.asp"-->
@@ -103,31 +87,6 @@
     <script>
 		$(function() { 
 			$("#nav-userinfo").click(function(){location.href = "main.asp";});
-			$("#returned-btn").click(function(){
-				var ArrinfoId = $("input:checked");
-				if (ArrinfoId.length <=0) {
-					alert("请选中要准备 【申请归还】 的记录!");
-					return false;
-				}
-				if(confirm("【申请归还】 操作后将不能恢复,继续吗?")) {
-					$.ajax({
-					url:  "service/myshop-returned.asp", 
-					data:$("#form-myshop").serialize(), 
-					dataType:'json', 
-					type:'post', 
-					success:function(data){
-						if (data.state == 0) {alert(data.msg);location.href = "myshop.asp";}
-						if (data.state == 1) {alert(data.msg);}
-						},
-					error: function(error) {
-						alert("出错了" + error);
-						console.log(error);
-						return false;
-						}
-					});
-				}
-			});
-
 		});
 	</script>
   </body>

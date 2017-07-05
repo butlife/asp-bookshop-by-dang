@@ -35,9 +35,20 @@
 	
 	Function Delete()
 		Dim lngId
-		Dim rssort, strSql 
+		Dim rssort, strSql, rsBook, strBookSql
 
 		lngId = ConvertLong(Request("tbId") & "")
+		
+		Set rsBook = Server.CreateObject("ADODB.RecordSet")
+		strBookSql = "Select * From info_t Where infosort_ZT_ID = " & lngId & ""
+		If rsBook.State = 1 Then rsBook.Close
+		rsBook.Open strBookSql, conn, 1, 1
+		if not(rsBook.bof or rsBook.eof) then
+			strMsg = strMsg & "<br><li>请先删除类别下所有书本，再尝试删除类别！</li>" & vbCrLf
+			If rsBook.State = 1 Then rsBook.Close
+			Set rsBook = Nothing
+			Exit Function
+		end if
 		
 		Set rssort = Server.CreateObject("ADODB.RecordSet")
 		strSql = "Select * From infosort_ZT Where sortid = " & lngId & ""
@@ -55,9 +66,6 @@
 		Set rssort = Nothing
 
 		On Error Resume Next 
-		
-		strSql = "Delete From info_t Where infosort_ZT_ID in (" & lngId & ")"
-		conn.Execute strSql
 		
 		strSql = "Delete From infosort_ZT Where sortid = " & lngId & ""
 		conn.Execute strSql

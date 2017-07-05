@@ -31,7 +31,7 @@
 
 	Set rsUser = Server.CreateObject("ADODB.RecordSet")
 	strsql = "select * from user_t where useracc = '" & strUserAcc & "' and UserId = " & lngUserId
-	if rsUser.state = 1 then rs.close
+	if rsUser.state = 1 then rsUser.close
 	rsuser.open strsql,conn,1,1
 	if not(rsUser.bof or rsUser.eof) then
 		strUserName = trim(rsuser("UserName") & "")

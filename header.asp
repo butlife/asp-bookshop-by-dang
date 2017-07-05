@@ -18,7 +18,7 @@
 			<ul class="dropdown-menu">
 			  <li><a href="myshopFav.asp">我的收藏</a></li>
 			  <li><a href="myshop.asp">正在借阅</a></li>
-			  <li><a href="myshoplog.asp">借阅记录</a></li>
+			  <li><a href="myshop-log.asp">借阅记录</a></li>
 			</ul>
 		  </div>
 		  <div class="btn-group" role="group">

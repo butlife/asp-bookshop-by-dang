@@ -1,6 +1,7 @@
 ﻿<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
+<!--#include file="../common/safe.asp"-->
 <%Response.ContentType = "text/json"%>
 <%
 '插入会员收藏书本，传入书本ID，读取session 中的userID

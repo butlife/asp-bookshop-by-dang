@@ -2,7 +2,7 @@
 	'=========================在网站运行前，请先修改以下信息=========================
 	
 	'网站安装目录，相对于根目录
-	gstrInstallDir = "/"
+	gstrInstallDir = "/site/book/"
 	gstrKeyWords = "网上借书系统"
 	gstrdescription = ""
 	gstrServiceTel = "0372110"

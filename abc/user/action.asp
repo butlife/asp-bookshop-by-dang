@@ -40,12 +40,12 @@
 		lngId = ConvertLong(Request("tbId") & "")
 		
 		Set rssort = Server.CreateObject("ADODB.RecordSet")
-		strSql = "Select * From infosort_CBS Where sortid = " & lngId & ""
+		strSql = "Select * From user_t Where userid = " & lngId & ""
 		If rssort.State = 1 Then rssort.Close
 		rssort.Open strSql, conn, 1, 1
 		
 		If rssort.Eof Then
-			strMsg = strMsg & "<br><li>类别不存在或者已经被删除！</li>" & vbCrLf
+			strMsg = strMsg & "<br><li>会员不存在或者已经被删除！</li>" & vbCrLf
 			If rssort.State = 1 Then rssort.Close
 			Set rssort = Nothing
 			Exit Function
@@ -56,10 +56,13 @@
 
 		On Error Resume Next 
 		
-		strSql = "Delete From info_t Where infosort_CBS_ID in (" & lngId & ")"
+		strSql = "Delete From shop_t Where userid = " & lngId
 		conn.Execute strSql
 		
-		strSql = "Delete From infosort_CBS Where sortid = " & lngId & ""
+		strSql = "Delete From Fav_t Where userid = " & lngId
+		conn.Execute strSql
+				
+		strSql = "Delete From user_t Where userid = " & lngId
 		conn.Execute strSql
 
 		If Err Then

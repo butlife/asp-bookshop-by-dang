@@ -1,6 +1,7 @@
 ﻿<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
+<!--#include file="../common/safe.asp"-->
 <%Response.ContentType = "text/json"%>
 <%
 	dim strUserAcc, strchkuserpwd, lngUserId, struserpwd

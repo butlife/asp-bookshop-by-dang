@@ -59,8 +59,8 @@
                         <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" alt="{{item.title}}" class="img-responsive img-rounded shopbook-img" />
                         <h4 class="text-center">{{item.title}}</h4>
                         <p class="text-right">
-                            <button class="btn btn-success btn-xs fav-btn" infoid="{{item.infoId}}" role="button" @click="fav_click(index)">
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{item.fav == '1' ? '己收藏' : '收藏'}}</button>
+                            <button class="btn btn-xs fav-btn btn-success" infoid="{{item.infoId}}" role="button" @click="fav_click(index)">
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{item.fav == '0' ? '收藏' : '己收藏'}}</button>
                         </p>
                     </div>
                 </div>

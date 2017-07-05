@@ -30,7 +30,7 @@ function search() {
     <a class="aButton" href="add.asp">图书添加</a>
     <a class="aButton" style="cursor:pointer;" onClick="AllDelete('CHK');">批量删除</a>
 <%
-	Dim lngInfoID, strtitle, bispassed, dtmakedate, strsortname, stradminname, ihit, strauthor, bistop, iorder, strKeyWords, strpicurl
+	Dim lngInfoID, strtitle, bispassed, dtmakedate, strsortname, stradminname, ihit, strauthor, bistop, iorder, strKeyWords, strpicurl, strinfokeywords
 	Dim rsInfo, i, strSql, strQuery, lngiCount
 	Dim lngPageSize, lngPageCount, lngCurrPage, lngRecordCount, bPagination
 	dim lnginfosort_CBS_ID, lnginfosort_FM_ID, lnginfosort_NL_ID, lnginfosort_XL_ID, lnginfosort_ZT_ID
@@ -40,6 +40,7 @@ function search() {
 	lnginfosort_NL_ID = ConvertLong(Request("infosort_NL_ID") & "")
 	lnginfosort_XL_ID = ConvertLong(Request("infosort_XL_ID") & "")
 	lnginfosort_ZT_ID = ConvertLong(Request("infosort_ZT_ID") & "")
+	strinfokeywords = trim(Request("infokeywords") & "")
 	strQuery = Trim(Request("Query") & "")
 	
 	infosort_NL(lnginfosort_NL_ID)
@@ -53,6 +54,7 @@ function search() {
 	infosort_CBS(lnginfosort_CBS_ID)
 	response.write "&nbsp;&nbsp;"
 %>
+	关键字：<input type="text" name="infokeywords" id="infokeywords" value="<%=strinfokeywords%>">
 	<input type="button" onClick="search();" value="查询">
   </div>
   <div id="contentPanel">
@@ -90,6 +92,9 @@ function search() {
 				End If
 				If lnginfosort_ZT_ID <> 0 Then
 					strQuery = strQuery & " And infosort_ZT_ID = " & lnginfosort_ZT_ID
+				End If
+				If strinfokeywords <> "" Then
+					strQuery = strQuery & " And (title like '%" & strinfokeywords & "%' or content like '%" & strinfokeywords & "%')"
 				End If
 '		Else
 '			strQuery = outHTML(strQuery)

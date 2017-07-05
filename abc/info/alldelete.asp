@@ -31,6 +31,12 @@
 		On Error Resume Next
 		conn.BeginTrans	'¿ªÊ¼
 		
+		strSql = "Delete From shop_t Where InfoId In (" & arynfoId & ")"
+		conn.Execute strSql
+		
+		strSql = "Delete From Fav_t Where InfoId In (" & arynfoId & ")"
+		conn.Execute strSql
+		
 		strSql = "Delete From info_t Where InfoId In (" & arynfoId & ")"
 		conn.Execute strSql
 		

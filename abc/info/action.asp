@@ -49,7 +49,7 @@
 		rsInfo.Open strSql, conn, 1, 1
 		
 		If (rsInfo.Bof Or rsInfo.Eof) Then
-			strMsg = strMsg & "<br><li>新闻信息不存在或者已经被删除！</li>" & vbCrLf
+			strMsg = strMsg & "<br><li>信息不存在或者已经被删除！</li>" & vbCrLf
 			If rsInfo.State = 1 Then rsInfo.Close
 			Set rsInfo = Nothing
 			Exit Function
@@ -71,7 +71,7 @@
 
 		If Err Then
 			If Err.Number = -2147217900 Then	'约束冲突
-				strMsg = strMsg & "<br><li>新闻信息已被使用！</li>" & vbCrLf
+				strMsg = strMsg & "<br><li>信息已被使用！</li>" & vbCrLf
 			End If
 			Err.Clear
 			setpass = False
@@ -93,7 +93,7 @@
 		rsInfo.Open strSql, conn, 1, 1
 		
 		If (rsInfo.Bof Or rsInfo.Eof) Then
-			strMsg = strMsg & "<br><li>新闻信息不存在或者已经被删除！</li>" & vbCrLf
+			strMsg = strMsg & "<br><li>信息不存在或者已经被删除！</li>" & vbCrLf
 			If rsInfo.State = 1 Then rsInfo.Close
 			Set rsInfo = Nothing
 			Exit Function
@@ -115,7 +115,7 @@
 
 		If Err Then
 			If Err.Number = -2147217900 Then	'约束冲突
-				strMsg = strMsg & "<br><li>新闻信息已被使用！</li>" & vbCrLf
+				strMsg = strMsg & "<br><li>信息已被使用！</li>" & vbCrLf
 			End If
 			Err.Clear
 			setpass = False
@@ -137,7 +137,7 @@
 		rsInfo.Open strSql, conn, 1, 1
 		
 		If rsInfo.Eof Then
-			strMsg = strMsg & "<br><li>新闻信息不存在或者已经被删除！</li>" & vbCrLf
+			strMsg = strMsg & "<br><li>信息不存在或者已经被删除！</li>" & vbCrLf
 			If rsInfo.State = 1 Then rsInfo.Close
 			Set rsInfo = Nothing
 			Exit Function
@@ -154,8 +154,14 @@
 		Set rsInfo = Nothing
 
 		On Error Resume Next 
+
+		strSql = "Delete From shop_t Where infoId = " & lngId
+		conn.Execute strSql
 		
-		strSql = "Delete From info_t Where infoid = " & lngId & ""
+		strSql = "Delete From Fav_t Where infoId = " & lngId
+		conn.Execute strSql
+
+		strSql = "Delete From info_t Where infoid = " & lngId
 		conn.Execute strSql
 
 		If Err Then
