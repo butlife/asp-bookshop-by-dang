@@ -2,7 +2,8 @@
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
 <!--#include file="../common/safe.asp"-->
-<%Response.ContentType = "text/json"%>
+<%Response.ContentType = "application/json"%>
+<%Response.Charset="UTF-8"%>
 <%
 	dim rsBook, strsql, iCount, strQuery
 	dim lngSortId, strbookKeyWords, lngPageNum

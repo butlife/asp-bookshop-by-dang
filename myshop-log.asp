@@ -27,7 +27,7 @@
      <div class="panel panel-default">
       <div class="panel-heading">借阅历史记录</div>
       <div class="panel-body" style="padding:0;">
-       <div class="form-myshop" id="form-myshop-log">
+       <form class="form-myshop" id="form-myshop-log" method="post">
             <table class="table table-striped">
                     <thead>
                         <th>#</th>
@@ -44,7 +44,7 @@
                         </tr>
                     </tbody>
                 </table>
-          </div>
+          </form>
       </div>
     </div>   
     </div>
@@ -77,7 +77,7 @@
             methods:{
                 get_list:function(){
                     var vm = this;
-                    vm.$http.get('/service/myshop-log.asp').then(response => {
+                    vm.$http.get('service/myshop-log.asp').then(response => {
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){

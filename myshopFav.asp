@@ -30,7 +30,7 @@
   <body style="padding-top:50px;">
 	<!--#include file="header.asp"-->
     <div class="container" id="app">
-       <div class="form-myshopFav" id="form-myshopFav">
+       <form class="form-myshopFav" id="form-myshopFav" method="post">
      <div class="panel panel-default">
       <div class="panel-heading">收藏夹</div>
       <div class="panel-body" style="padding:0;">
@@ -43,7 +43,7 @@
                     <tbody>
                         <tr v-for="(item, index) in list">
                             <td><input type="checkbox" name="favId" v-bind:value="item.FavId"></td>
-                            <td>{{item.Title}}<span class="badge">{{item.icount}}</span></td>
+                            <td>{{item.Title}}<span class="badge">{{item.iCount}}</span></td>
                             <td>{{item.FavDate}}</td>
                         </tr>
                     </tbody>
@@ -66,7 +66,7 @@
                 </div>
         </div>
       </div>
-      </div>
+      </form>
     </div>
     <!-- /container -->
 	<!--#include file="footer.asp"-->
@@ -74,8 +74,7 @@
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-   
- <script>
+    <script>
 		$(function() { 
 			$("#nav-userinfo").click(function(){location.href = "main.asp";});
 			//取消收藏
@@ -157,7 +156,7 @@
             methods:{
                 get_list:function(){
                     var vm = this;
-                    vm.$http.get('/service/myshopfav.asp').then(response => {
+                    vm.$http.get('service/myshopfav.asp').then(response => {
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){

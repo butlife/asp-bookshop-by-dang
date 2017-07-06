@@ -1,10 +1,11 @@
-<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
+ï»¿<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
 <!--#include file="../common/safe.asp"-->
-<%Response.ContentType = "text/json"%>
+<%Response.ContentType = "application/json"%>
+<%Response.Charset="UTF-8"%>
 <%
-'²åÈë»áÔ±ÊÕ²ØÊé±¾£¬´«ÈëÊé±¾ID£¬¶ÁÈ¡session ÖÐµÄuserID
+'æ’å…¥ä¼šå‘˜æ”¶è—ä¹¦æœ¬ï¼Œä¼ å…¥ä¹¦æœ¬IDï¼Œè¯»å–session ä¸­çš„userID
 	dim lngUserId, strArrFavId, i
 	dim rsFav, strsql, lngstate, strMsg, strDelSql
 	
@@ -25,10 +26,10 @@
 			rsFav.movenext
 		loop
 		lngstate = 0
-		strMsg = i & "Ìõ¼ÇÂ¼È¡ÏûÊÕ²Ø³É¹¦"
+		strMsg = i & "æ¡è®°å½•å–æ¶ˆæ”¶è—æˆåŠŸ"
 	else
 		lngstate = 1
-		strMsg = "ÇëÑ¡ÖÐÒªÈ¡ÏûÊÕ²ØµÄÊé±¾£¡"
+		strMsg = "è¯·é€‰ä¸­è¦å–æ¶ˆæ”¶è—çš„ä¹¦æœ¬ï¼"
 	end if
 	if rsFav.state = 1 then rsFav.close
 	set rsFav = nothing

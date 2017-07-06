@@ -2,7 +2,8 @@
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
 <!--#include file="../common/safe.asp"-->
-<%Response.ContentType = "text/json"%>
+<%Response.ContentType = "application/json"%>
+<%Response.Charset="UTF-8"%>
 <%
 	dim rsFav, strsql, iCount, strQuery
 	dim lngUserId, strbookKeyWords, lngPageNum
@@ -41,12 +42,14 @@
 			lngFavId = rsFav("FavId")
 			lngInfoId = rsFav("infoId")
 			strTitle = rsFav("Title")
-			strFavDate = rsFav("FavDate")
+			strFavDate = Format_Time(rsFav("FavDate"),2)
+			lngiCount = rsFav("iCount")
 %>
         {
             "FavId" : "<%=lngFavId%>",
             "infoId" : "<%=lngInfoId%>",
             "Title" : "<%=strTitle%>",
+            "iCount" : "<%=lngiCount%>",
             "FavDate" : "<%=strFavDate%>"
         }
 <%

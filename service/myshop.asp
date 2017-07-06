@@ -2,7 +2,8 @@
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
 <!--#include file="../common/safe.asp"-->
-<%Response.ContentType = "text/json"%>
+<%Response.ContentType = "application/json"%>
+<%Response.Charset="UTF-8"%>
 <%
 	dim rsShop, strsql, iCount, strQuery
 	dim lngUserId, strbookKeyWords, lngPageNum
@@ -41,8 +42,8 @@
 			lngUserId = rsShop("UserId")
 			lngShopId = rsShop("ShopId")
 			strTitle = rsShop("Title")
-			strSendDate = rsShop("sendDate")
-			strAddDate = rsShop("AddDate")
+			strSendDate = Format_Time(rsShop("sendDate"),2)
+			strAddDate = Format_Time(rsShop("AddDate"),2)
 			lngshopState = rsShop("shopState")
 			strshopStateName = getState(lngshopState) 
 %>

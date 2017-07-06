@@ -1,10 +1,11 @@
-<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
+ï»¿<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
 <!--#include file="../common/conn-utf.asp"-->
 <!--#include file="../common/Function-utf.asp"-->
 <!--#include file="../common/safe.asp"-->
-<%Response.ContentType = "text/json"%>
+<%Response.ContentType = "application/json"%>
+<%Response.Charset="UTF-8"%>
 <%
-'²åÈë»áÔ±ÊÕ²ØÊé±¾£¬´«ÈëÊé±¾ID£¬¶ÁÈ¡session ÖÐµÄuserID
+'æ’å…¥ä¼šå‘˜æ”¶è—ä¹¦æœ¬ï¼Œä¼ å…¥ä¹¦æœ¬IDï¼Œè¯»å–session ä¸­çš„userID
 	dim lngUserId, strArrShopId, i
 	dim rsShop, strsql, lngstate, strMsg
 	
@@ -28,10 +29,10 @@
 			rsshop.movenext
 		loop
 		lngstate = 0
-		strMsg = i & "±¾Êé£¬ÉêÇë¹é»¹³É¹¦"
+		strMsg = i & "æœ¬ä¹¦ï¼Œç”³è¯·å½’è¿˜æˆåŠŸ"
 	else
 		lngstate = 1
-		strMsg = "ÇëÑ¡ÖÐÒª¹é»¹µÄÊé±¾£¡"
+		strMsg = "è¯·é€‰ä¸­è¦å½’è¿˜çš„ä¹¦æœ¬ï¼"
 	end if
 	if rsShop.state = 1 then rsShop.close
 	set rsShop = nothing

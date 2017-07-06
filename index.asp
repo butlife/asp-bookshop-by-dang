@@ -39,7 +39,7 @@
         <hr>
         <div class="btn-group btn-group-justified" role="group" aria-label="...">
           <div class="btn-group" role="group">
-            <button type="submit" class="btn btn-primary">登录</button>
+            <button type="button" class="btn btn-primary" id="submit-btn">登录</button>
           </div>
         </div>
       </form>
@@ -53,7 +53,19 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script>
 	$(function() { 
-		$("#form-signin").submit( function(){
+		$("#submit-btn").click( function(){
+			var frm = $("#form-signin");
+			if ($("#userAcc").val() == "") {
+				alert("请输入用户名");
+				$("#userAcc").focus()
+				return false;
+			}
+			if ($("#userpwd").val() == "") {
+				alert("请输入用户密码");
+				$("#userpwd").focus()
+				return false;
+			}
+
 			$.ajax({
 			url:  "service/login.asp", 
 			data:$("#form-signin").serialize(), 
@@ -68,7 +80,25 @@
 				console.log(error);
 				}
 			});
+
 		});
+			
+//		$("#form-signin").submit( function(){
+//			$.ajax({
+//			url:  "service/login.asp", 
+//			data:$("#form-signin").serialize(), 
+//			dataType:'json', 
+//			type:'post', 
+//			success:function(data){
+//				if (data.state == 0) {location.href = "main.asp";}
+//				if (data.state == 1) {alert(data.msg);}
+//				},
+//			error: function(error) {
+//				alert("出错了" + error);
+//				console.log(error);
+//				}
+//			});
+//		});
 	});
 	</script>
   </body>

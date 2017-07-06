@@ -115,7 +115,7 @@
             methods:{
                 get_list:function(){
                     var vm = this;
-                    vm.$http.get('/service/myshop.asp').then(response => {
+                    vm.$http.get('service/myshop.asp').then(response => {
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){
