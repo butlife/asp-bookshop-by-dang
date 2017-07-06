@@ -9,11 +9,6 @@
     <!--#include file="common/Function-utf.asp"-->
     <!--#include file="common/safe.asp"-->
     <title>网上书城-书库-<%=gstrKeyWords%></title>
-
-
-    <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
-    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link href="<%=gstrInstallDir%>bootstrap337/css/bootstrap.min.css" rel="stylesheet">
@@ -29,6 +24,71 @@
                 /*width:100px;
                 height:100px;*/
             }
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+}
         </style>
     </head>
     <%
@@ -39,6 +99,7 @@
     <body style="padding-top:50px;">
         <!--#include file="header.asp"-->
         <div class="container" id="app">
+            <vmodal :title="modalmsg.title" :text="modalmsg.text" :show="showmodal" v-on:close="close"></vmodal>
             <div class="row" style="margin-bottom:10px;">
                 <div class="col-xs-12">
                     <div class="input-group">
@@ -55,30 +116,47 @@
             <div id="gvBooks" class="row" v-load-more="load_more">
                 <div class="col-xs-6" v-for="(item, index) in booklist">
                     <div class="thumbnail">
-                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" alt="{{item.title}}" @click="showbox(index)" class="img-responsive img-rounded shopbook-img" />
+                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" @click="showbox(index)" class="img-responsive img-rounded shopbook-img" />
                         <h5 class="text-center">{{item.title}}</h5>
                         <p class="text-right">
-                            <button class="btn btn-xs fav-btn btn-success" infoid="{{item.infoId}}" role="button" @click="fav_click(index)">
+                            <button class="btn btn-xs fav-btn btn-success" v-bind:infoid="item.infoId" role="button" @click="fav_click(index)">
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{item.fav == '0' ? '收藏' : '己收藏'}}</button>
                         </p>
                     </div>
                 </div>
             </div>
-
-             <div class="modal fade" id="modal_box" role="dialog">
-                <div class="modal-dilog" role=ducument>
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">{{modalmsg.title}}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>{{modalmsg.content}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+
+         <template id="template-modal">
+            <transition name="modal">
+    <div class="modal-mask" v-show="show">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          <div class="modal-header">
+            <slot name="header">
+              {{title}}
+            </slot>
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+              {{text}}
+            </slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="modal-default-button" @click="close">
+                关闭
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+            </template> 
+
         <!-- /container -->
         <!--#include file="footer.asp"-->
 
@@ -92,6 +170,8 @@
             });
             
         </script>
+            <script src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.js"></script>
         <script type="text/javascript">
             Vue.use(VueResource);
             Vue.http.options.emulateJSON = true;
@@ -110,7 +190,23 @@
     return  NumberMode == 'float'? parseFloat(target) : parseInt(target);
 }
 
-            var modal = $('#modal_box').modal({show:false});
+        const modal = Vue.component('vmodal', {
+            template:'#template-modal',
+            props:['show', 'title', 'text'],
+            created:function(){
+                console.log('vmodal created');
+            },
+            data:function(){
+                return {
+                   
+                };
+            },
+            methods:{
+                close:function(){
+                    this.$emit('close');
+                },
+            },
+        });
 
             var app = new Vue({
                 el:'#app',
@@ -125,7 +221,8 @@
                     current_page: -1,
                     max_page: 10,
                     loading: false,
-                    modalmsg:{title:'', content:''},
+                    showmodal:false,
+                    modalmsg:{title:'', text:''},
                 },
                 methods: {
                     load_book: function(search) {
@@ -177,8 +274,13 @@
                     },
                     showbox:function(index){
                         var book = this.booklist[index];
-                        this.modalmsg = {title:book.title, content:book.content};
-                        modal.modal('show');
+                        this.modalmsg = {title:book.title, text:book.content};
+                        this.showmodal = true;
+                        console.log('showbox', index);
+                    },
+                    close:function(){
+                        this.showmodal = false;
+                        console.log('modal click close');
                     },
                 },
                 directives: {
