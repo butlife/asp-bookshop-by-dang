@@ -61,7 +61,7 @@
                response.write(",")
             end if
 
-			if iCount >= glngPageSize_phone then exit do
+			if iCount >= glngPageSize then exit do
 		loop
 	end if
 %>

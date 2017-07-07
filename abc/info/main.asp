@@ -21,6 +21,13 @@ function search() {
 	formMain.action = "#";
 	formMain.submit();
 }
+
+function btnDelete_Click(id){
+	if(!confirm("删除书本同时会删除该书本所有相关记录，\n删除的记录将不可恢复,继续吗?")){
+		return;
+	}
+	location.href = "action.asp?Type=delete&tbId=" + id;
+}
 </script>
 </head>
 <body onLoad="Body_Load();">
@@ -171,7 +178,7 @@ function search() {
 				Else
 					Response.Write "<a class='admin_btn' href='action.asp?type=top&tbId=" & lngInfoID & "'>置顶</a>" & vbCrLf
 				End If
-				Response.Write "<a class='admin_btn' href='action.asp?type=delete&tbId=" & lngInfoID & "'>删除</a>" & vbCrLf
+				Response.Write "<a class='admin_btn' href='javascript:btnDelete_Click(" & lngInfoID & ")'>删除</a>" & vbCrLf
 				Response.Write "</td>" & vbCrLf
 				Response.Write "</tr>" & vbCrLf
 				

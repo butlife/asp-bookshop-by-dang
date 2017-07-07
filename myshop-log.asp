@@ -32,14 +32,12 @@
                     <thead>
                         <th>#</th>
                         <th>书名</th>
-                        <th>状态</th>
                         <th>送货时间</th>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in list">
                             <td>{{index+1}}</td>
                             <td>{{item.Title}}</td>
-                            <td>{{item.iCount}}</td>
                             <td>{{item.returnedDate}}</td>
                         </tr>
                     </tbody>

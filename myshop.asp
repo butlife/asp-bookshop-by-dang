@@ -38,8 +38,8 @@
                     <tbody>
                         <tr v-for="(item, index) in list">
                             <td>
-                                <input type="checkbox" v-show="item.edit" name="shopid" v-bind:value="item.ShopId">
-                                <span v-show="!item.edit">#</span>
+                                <input type="checkbox" v-if="item.shopState === '1'" name="shopid" v-bind:value="item.ShopId">
+                                <span v-else>#</span>
                             </td>
                             <td>{{item.Title}}</td>
                             <td>{{item.shopStateName}}</td>
