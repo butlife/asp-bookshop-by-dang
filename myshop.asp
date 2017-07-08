@@ -27,7 +27,7 @@
        <form class="form-myshop" id="form-myshop" method="post">
       <div class="panel panel-default">
       <div class="panel-heading">正在借阅</div>
-      <div class="panel-body" style="padding:0;">
+      <div class="panel-body" style="padding:0;" v-load-more="load_more">
            <table class="table table-striped">
                     <thead>
                         <th>#</th>
@@ -111,18 +111,37 @@
             },
             data:{
                 list:[],
+                current_page: -1,
+                max_page: 10,
+                loading: false,
+                showmodal:false,
             },
             methods:{
                 get_list:function(){
                     var vm = this;
-                    vm.$http.get('service/myshop.asp').then(response => {
+                    vm.$http.get('service/myshop.asp?PageNum=' + vm.current_page).then(response => {
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){
-                                vm.list = json.body;
+                                vm.max_page = json.data.PageNum;
+                                if(vm.current_page == -1){
+                                    vm.list = json.body;
+                                }else{
+                                    vm.list = vm.list.concat(json.body);
+                                }
                             }
+                            vm.loading = false;
                         });
                     });
+                },
+                load_more:function(){
+                    if(!this.loading){
+                            if(this.current_page < this.max_page){
+                                this.loading = true;
+                                this.current_page++;
+                                this.get_list();
+                            }
+                    }
                 },
             },
         });

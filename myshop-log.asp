@@ -26,7 +26,7 @@
     <div class="container" id="app">
      <div class="panel panel-default">
       <div class="panel-heading">借阅历史记录</div>
-      <div class="panel-body" style="padding:0;">
+      <div class="panel-body" style="padding:0;" v-load-more="load_more">
        <form class="form-myshop" id="form-myshop-log" method="post">
             <table class="table table-striped">
                     <thead>
@@ -59,6 +59,7 @@
 	</script>
     <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.min.js"></script>
+    <script type="text/javascript" src="<%=gstrInstallDir%>js/vue-load-more.js"></script>
     <script type="text/javascript">
         Vue.use(VueResource);
         Vue.http.options.emulateJSON = true;
@@ -71,18 +72,35 @@
             },
             data:{
                 list:[],
+                current_page: -1,
+                max_page: 10,
+                loading: false,
             },
             methods:{
                 get_list:function(){
                     var vm = this;
-                    vm.$http.get('service/myshop-log.asp').then(response => {
+                    vm.$http.get('service/myshop-log.asp?PageNum=' + vm.current_page).then(response => {
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){
-                                vm.list = json.body;
+                                if(vm.current_page == -1){
+                                    vm.list = json.body;
+                                }else{
+                                    vm.list = vm.list.concat(json.body);
+                                } 
                             }
+                            vm.loading = false;
                         });
                     });
+                },
+                load_more:function(){
+                    if(!this.loading){
+                            if(this.current_page < this.max_page){
+                                this.loading = true;
+                                this.current_page++;
+                                this.get_list();
+                            }
+                        }
                 },
             },
         });

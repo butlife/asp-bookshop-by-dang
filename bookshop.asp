@@ -172,6 +172,7 @@
         </script>
             <script src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
     <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.js"></script>
+    <script type="text/javascript" src="<%=gstrInstallDir%>js/vue-load-more.js"></script>
         <script type="text/javascript">
             Vue.use(VueResource);
             Vue.http.options.emulateJSON = true;
@@ -283,68 +284,6 @@
                         console.log('modal click close');
                     },
                 },
-                directives: {
-		'load-more': {
-			bind: (el, binding) => {
-				let windowHeight = window.screen.height;
-				let height;
-				let setTop;
-				let paddingBottom;
-				let marginBottom;
-				let requestFram;
-				let oldScrollTop;
-				let scrollEl;
-				let heightEl;
-				let scrollType = el.attributes.type && el.attributes.type.value;
-				let scrollReduce = 2;
-				if (scrollType == 2) {
-					scrollEl = el;
-					heightEl = el.children[0];
-				} else {
-					scrollEl = document.body;
-					heightEl = el;
-				}
-
-				el.addEventListener('touchstart', () => {
-					height = heightEl.clientHeight;
-					if (scrollType == 2) {
-						height = height
-					}
-					setTop = el.offsetTop;
-					paddingBottom = getStyle(el, 'paddingBottom');
-					marginBottom = getStyle(el, 'marginBottom');
-				}, false)
-
-				el.addEventListener('touchmove', () => {
-					loadMore();
-				}, false)
-
-				el.addEventListener('touchend', () => {
-					oldScrollTop = scrollEl.scrollTop;
-					moveEnd();
-				}, false)
-
-				function moveEnd () {
-					requestFram = requestAnimationFrame(() => {
-						if (scrollEl.scrollTop != oldScrollTop) {
-							oldScrollTop = scrollEl.scrollTop;
-							moveEnd()
-						} else {
-							cancelAnimationFrame(requestFram);
-							height = heightEl.clientHeight;
-							loadMore();
-						}
-					})
-				}
-
-				function loadMore() {
-					if (scrollEl.scrollTop + windowHeight >= height + setTop + paddingBottom + marginBottom - scrollReduce) {
-						binding.value();
-					}
-				}
-			}
-		}
-	}
             });
 
         </script>
