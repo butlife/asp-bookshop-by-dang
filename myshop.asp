@@ -111,7 +111,7 @@
             },
             data:{
                 list:[],
-                current_page: -1,
+                current_page: 1,
                 max_page: 10,
                 loading: false,
                 showmodal:false,
@@ -123,14 +123,16 @@
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){
-                                vm.max_page = json.data.PageNum;
-                                if(vm.current_page == -1){
+                                vm.max_page = json.data.maxpagenum;
+                                if(vm.current_page == 1){
                                     vm.list = json.body;
                                 }else{
                                     vm.list = vm.list.concat(json.body);
                                 }
                             }
-                            vm.loading = false;
+                            setTimeout(function() {
+                                vm.loading = false;
+                            }, 1000);
                         });
                     });
                 },

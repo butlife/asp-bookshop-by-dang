@@ -18,6 +18,8 @@
 	rsShop.open strsql,conn,1,1
 	rsShop.pagesize = glngPageSize
 
+	pagecount = rsShop.PageCount
+
 	if lngPageNum > rsShop.PageCount then  
 		rsShop.AbsolutePage = rsShop.PageCount  
 	elseif lngPageNum <= 0 then  
@@ -32,7 +34,8 @@
     "msg": "success",
 	"data" :{
     	"UserId" : "<%=lngUserId%>",
-        "PageNum" : "<%=lngPageNum%>"
+        "PageNum" : "<%=lngPageNum%>",
+		"maxpagenum":<%=pagecount%>
     },
     "body" : [
 <%

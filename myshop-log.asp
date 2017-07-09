@@ -72,8 +72,8 @@
             },
             data:{
                 list:[],
-                current_page: -1,
-                max_page: 10,
+                current_page: 1,
+                max_page: 1,
                 loading: false,
             },
             methods:{
@@ -83,13 +83,16 @@
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){
-                                if(vm.current_page == -1){
+                                vm.max_page = json.data.maxpage;
+                                if(vm.current_page == 1){
                                     vm.list = json.body;
                                 }else{
                                     vm.list = vm.list.concat(json.body);
                                 } 
                             }
-                            vm.loading = false;
+                            setTimeout(function() {
+                                vm.loading = false;
+                            }, 1000);
                         });
                     });
                 },

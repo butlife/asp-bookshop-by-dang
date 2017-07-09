@@ -153,23 +153,23 @@
             },
             data:{
                 list:[],
-                current_page: -1,
-                max_page: 10,
+                current_page: 1,
+                max_page: 1,
                 loading: false,
                 showmodal:false,
             },
             methods:{
                 get_list:function(){
                     var vm = this;
-                    vm.$http.get('service/myshopfav.asp').then(response => {
+                    vm.$http.get('service/myshopfav.asp?PageNum=' + vm.current_page).then(response => {
                         response.json().then(json => {
                             console.log(json);
                             if(json.state == 0){
-                                vm.max_page = json.data.PageNum;
-                                if(vm.current_page == -1){
+                                vm.max_page = json.data.maxpagenum;
+                                if(vm.current_page == 1){
                                     vm.list = json.body;
                                 }else{
-                                    vm.list = vm.concat(json.body);
+                                    vm.list = vm.list.concat(json.body);
                                 }
                             }
                             vm.loading = false;

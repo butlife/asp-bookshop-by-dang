@@ -29,6 +29,8 @@
 	rsBook.open strsql,conn,1,1
 	rsBook.pagesize = glngPageSize_phone
 
+	pagecount = rsBook.PageCount
+
 '	if lngPageNum > rsBook.PageCount then  
 '		rsBook.AbsolutePage = rsBook.PageCount
 '	elseif lngPageNum <= 0 then  
@@ -47,7 +49,8 @@
 	"data" :{
     	"sortid" : "<%=lngSortId%>",
         "bookKeyWords" : "<%=strbookKeyWords%>",
-        "PageNum" : "<%=lngPageNum%>"
+        "PageNum" : "<%=lngPageNum%>",
+		"maxpagenum":<%=pagecount%>
     },
     "body" : [
 <%

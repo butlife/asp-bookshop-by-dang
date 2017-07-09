@@ -18,6 +18,8 @@
 	rsFav.open strsql,conn,1,1
 	rsFav.pagesize = glngPageSize
 
+	pagecount = rsFav.PageCount
+
 	if lngPageNum > rsFav.PageCount then  
 		rsFav.AbsolutePage = rsFav.PageCount  
 	elseif lngPageNum <= 0 then  
@@ -32,7 +34,8 @@
     "msg": "success",
 	"data" :{
     	"UserId" : "<%=lngUserId%>",
-        "PageNum" : "<%=lngPageNum%>"
+        "PageNum" : "<%=lngPageNum%>",
+		"maxpagenum":<%=pagecount%>
     },
     "body" : [
 <%

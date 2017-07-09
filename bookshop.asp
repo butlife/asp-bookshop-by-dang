@@ -24,71 +24,6 @@
                 /*width:100px;
                 height:100px;*/
             }
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
-}
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-
-.modal-default-button {
-  float: right;
-}
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
-}
         </style>
     </head>
     <%
@@ -99,13 +34,12 @@
     <body style="padding-top:50px;">
         <!--#include file="header.asp"-->
         <div class="container" id="app">
-            <vmodal :title="modalmsg.title" :text="modalmsg.text" :show="showmodal" v-on:close="close"></vmodal>
             <div class="row" style="margin-bottom:10px;">
                 <div class="col-xs-12">
                     <div class="input-group">
                         <input type="text" class="form-control" name="bookKeyWords" v-model='search_text' id="bookKeyWords" placeholder="输入关键字...">
                         <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" id="booklist-search-btn" @click='load_book(true)'>
+                                <button class="btn btn-primary" type="button" id="booklist-search-btn" @click='current_page=1;load_book(true)'>
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
                                 </button>
                             </span>
@@ -142,41 +76,10 @@
         </script>
             <script src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
     <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.js"></script>
+    <script type="text/javascript" src="<%=gstrInstallDir%>js/vue-load-more.js"></script>
         <script type="text/javascript">
             Vue.use(VueResource);
             Vue.http.options.emulateJSON = true;
-
-            const getStyle = (element, attr, NumberMode = 'int') => {
-    let target;
-    // scrollTop 获取方式不同，没有它不属于style，而且只有document.body才能用
-    if (attr === 'scrollTop') { 
-        target = element.scrollTop;
-    }else if(element.currentStyle){
-        target = element.currentStyle[attr]; 
-    }else{ 
-        target = document.defaultView.getComputedStyle(element,null)[attr]; 
-    }
-    //在获取 opactiy 时需要获取小数 parseFloat
-    return  NumberMode == 'float'? parseFloat(target) : parseInt(target);
-}
-
-        const modal = Vue.component('vmodal', {
-            template:'#template-modal',
-            props:['show', 'title', 'text'],
-            created:function(){
-                console.log('vmodal created');
-            },
-            data:function(){
-                return {
-                   
-                };
-            },
-            methods:{
-                close:function(){
-                    this.$emit('close');
-                },
-            },
-        });
 
             var app = new Vue({
                 el:'#app',
@@ -189,7 +92,7 @@
                     sortid: '<%=lngSortId%>',
                     search_text: '<%=strKeyWords%>',
                     current_page: 1,
-                    max_page: 10,
+                    max_page: 1,
                     loading: false,
                     showmodal:false,
                     modalmsg:{title:'', text:''},
@@ -200,19 +103,20 @@
                         vm.$http.post('service/bookshop.asp', {
                             PageNum: vm.current_page,
                             bookKeyWords: vm.search_text,
-                            //PageNum: vm.current_page
-                            PageNum: vm.current_page
                         }).then(function(response) {
                             response.json().then(function(json) {
                                 console.log('bookshop.asp', json);
                                 if (json.state == 0) {
+                                    vm.max_page = json.data.maxpagenum;
                                     if (vm.current_page == -1 || search === true) {
                                         vm.booklist = json.body;
                                     }else{
                                         vm.booklist = vm.booklist.concat(json.body);
                                     }
                                 }
-                                vm.loading = false;
+                                setTimeout(function() {
+                                    vm.loading = false;
+                                }, 1000);
                             });
                         });
                     },
@@ -249,68 +153,6 @@
 						location.href = showUrl;
 						},
                 },
-                directives: {
-		'load-more': {
-			bind: (el, binding) => {
-				let windowHeight = window.screen.height;
-				let height;
-				let setTop;
-				let paddingBottom;
-				let marginBottom;
-				let requestFram;
-				let oldScrollTop;
-				let scrollEl;
-				let heightEl;
-				let scrollType = el.attributes.type && el.attributes.type.value;
-				let scrollReduce = 2;
-				if (scrollType == 2) {
-					scrollEl = el;
-					heightEl = el.children[0];
-				} else {
-					scrollEl = document.body;
-					heightEl = el;
-				}
-
-				el.addEventListener('touchstart', () => {
-					height = heightEl.clientHeight;
-					if (scrollType == 2) {
-						height = height
-					}
-					setTop = el.offsetTop;
-					paddingBottom = getStyle(el, 'paddingBottom');
-					marginBottom = getStyle(el, 'marginBottom');
-				}, false)
-
-				el.addEventListener('touchmove', () => {
-					loadMore();
-				}, false)
-
-				el.addEventListener('touchend', () => {
-					oldScrollTop = scrollEl.scrollTop;
-					moveEnd();
-				}, false)
-
-				function moveEnd () {
-					requestFram = requestAnimationFrame(() => {
-						if (scrollEl.scrollTop != oldScrollTop) {
-							oldScrollTop = scrollEl.scrollTop;
-							moveEnd()
-						} else {
-							cancelAnimationFrame(requestFram);
-							height = heightEl.clientHeight;
-							loadMore();
-						}
-					})
-				}
-
-				function loadMore() {
-					if (scrollEl.scrollTop + windowHeight >= height + setTop + paddingBottom + marginBottom - scrollReduce) {
-						binding.value();
-					}
-				}
-			}
-		}
-	}
             });
 
         </script>
