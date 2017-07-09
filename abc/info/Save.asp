@@ -55,9 +55,11 @@
 		iorder = ConvertLong(request("iorder") & "")
 		strpicurl = trim(request("picurl") & "")
 		adminid = ConvertLong(request.cookies(gstrSessionPrefix & "adminid") & "")
+		'strremark = DBC2SBC(Request("remark"),0)
 		strremark = Request("remark")
 		'======开始：eWebEditor编辑区取值=============
 		sContent = Request("s_News")
+		'sContent = replaceCode(Request("s_News"))
 		'=============================================		
 		Set rsInfo = Server.CreateObject("ADODB.RecordSet")
 		'On Error Resume Next

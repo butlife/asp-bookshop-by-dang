@@ -103,6 +103,7 @@ function allchk(frm){
     <a class="" href="main1.asp">已发货</a>
     <a class="" href="main2.asp">待收回</a>
     <a class="" href="main3.asp">己完结</a>
+    <a class="" href="mainAll.asp">全部</a>
     <span class="red">||</span>
 <%
 	Dim lngInfoID, strtitle, strKeyWords, lngShopID, lnguserId, strUseracc, strusername, strusertel, strAdddate, lngshopState
@@ -278,7 +279,7 @@ function allchk(frm){
 			response.write "<td>" & strAdddate & "</td>"
 			response.write "<td>" & strState & "</td>"
 			if i = 0 then
-				response.write "<td rowspan=""9"" style=""text-align:center;"">"
+				response.write "<td rowspan=""999"" style=""text-align:center;"">"
 				
 				response.write "<input type=""button"" class=""Button"" onClick=""btnManySend_Click('userOrderFrm" & uid & "');"" value=""发货"" />"
 				response.write "<br><br>"

@@ -12,7 +12,6 @@
 	lngUserId = ConvertLong(Session("UserId") & "")
 	strUserAcc = trim(Session("UserAcc") & "")
 	strchkuserpwd = trim(request("chkuserpwd") & "")
-	struseradd = trim(request("useradd") & "")
 	strnewuserpwd = trim(request("newuserpwd") & "")
 	strchknewuserpwd = trim(request("chknewuserpwd") & "")
 		
@@ -23,10 +22,7 @@
 	if not(rsUser.bof or rsUser.eof) then
 		struserpwd = trim(rsuser("userpwd") & "")
 		if (strchkuserpwd = struserpwd) then
-				rsuser("username") = strusername
-				rsUser("userSex") = struserSex
-				rsUser("useradd") = struseradd
-				rsUser("hobby") = strhobby
+				rsuser("userpwd") = strnewuserpwd
 				rsUser.update
 				lngstate = 0
 				strMsg = "修改资料成功"

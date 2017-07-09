@@ -116,7 +116,7 @@
             <div id="gvBooks" class="row" v-load-more="load_more">
                 <div class="col-xs-6" v-for="(item, index) in booklist">
                     <div class="thumbnail">
-                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" @click="showbox(index)" class="img-responsive img-rounded shopbook-img" />
+                        <img v-bind:src="'<%=gstrInstallDir%>uppic/big/' + item.picurl" @click="showBook(index)" class="img-responsive img-rounded shopbook-img" />
                         <h5 class="text-center">{{item.title}}</h5>
                         <p class="text-right">
                             <button class="btn btn-xs fav-btn btn-success" v-bind:infoid="item.infoId" role="button" @click="fav_click(index)">
@@ -126,36 +126,6 @@
                 </div>
             </div>
         </div>
-
-         <template id="template-modal">
-            <transition name="modal">
-    <div class="modal-mask" v-show="show">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          <div class="modal-header">
-            <slot name="header">
-              {{title}}
-            </slot>
-          </div>
-
-          <div class="modal-body">
-            <slot name="body">
-              {{text}}
-            </slot>
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer">
-              <button class="modal-default-button" @click="close">
-                关闭
-              </button>
-            </slot>
-          </div>
-        </div>
-      </div>
-    </div>
-  </transition>
-            </template> 
 
         <!-- /container -->
         <!--#include file="footer.asp"-->
@@ -172,7 +142,6 @@
         </script>
             <script src="https://cdn.bootcss.com/vue/2.3.4/vue.js"></script>
     <script src="https://cdn.bootcss.com/vue-resource/1.3.4/vue-resource.js"></script>
-    <script type="text/javascript" src="<%=gstrInstallDir%>js/vue-load-more.js"></script>
         <script type="text/javascript">
             Vue.use(VueResource);
             Vue.http.options.emulateJSON = true;
@@ -219,7 +188,7 @@
                     booklist: [],
                     sortid: '<%=lngSortId%>',
                     search_text: '<%=strKeyWords%>',
-                    current_page: -1,
+                    current_page: 1,
                     max_page: 10,
                     loading: false,
                     showmodal:false,
@@ -231,6 +200,7 @@
                         vm.$http.post('service/bookshop.asp', {
                             PageNum: vm.current_page,
                             bookKeyWords: vm.search_text,
+                            //PageNum: vm.current_page
                             PageNum: vm.current_page
                         }).then(function(response) {
                             response.json().then(function(json) {
@@ -273,17 +243,74 @@
                             }
                         }
                     },
-                    showbox:function(index){
+                    showBook:function(index){
                         var book = this.booklist[index];
-                        this.modalmsg = {title:book.title, text:book.content};
-                        this.showmodal = true;
-                        console.log('showbox', index);
-                    },
-                    close:function(){
-                        this.showmodal = false;
-                        console.log('modal click close');
-                    },
+						var showUrl = "bookshow.asp?infoId=" + book.infoId;
+						location.href = showUrl;
+						},
                 },
+                directives: {
+		'load-more': {
+			bind: (el, binding) => {
+				let windowHeight = window.screen.height;
+				let height;
+				let setTop;
+				let paddingBottom;
+				let marginBottom;
+				let requestFram;
+				let oldScrollTop;
+				let scrollEl;
+				let heightEl;
+				let scrollType = el.attributes.type && el.attributes.type.value;
+				let scrollReduce = 2;
+				if (scrollType == 2) {
+					scrollEl = el;
+					heightEl = el.children[0];
+				} else {
+					scrollEl = document.body;
+					heightEl = el;
+				}
+
+				el.addEventListener('touchstart', () => {
+					height = heightEl.clientHeight;
+					if (scrollType == 2) {
+						height = height
+					}
+					setTop = el.offsetTop;
+					paddingBottom = getStyle(el, 'paddingBottom');
+					marginBottom = getStyle(el, 'marginBottom');
+				}, false)
+
+				el.addEventListener('touchmove', () => {
+					loadMore();
+				}, false)
+
+				el.addEventListener('touchend', () => {
+					oldScrollTop = scrollEl.scrollTop;
+					moveEnd();
+				}, false)
+
+				function moveEnd () {
+					requestFram = requestAnimationFrame(() => {
+						if (scrollEl.scrollTop != oldScrollTop) {
+							oldScrollTop = scrollEl.scrollTop;
+							moveEnd()
+						} else {
+							cancelAnimationFrame(requestFram);
+							height = heightEl.clientHeight;
+							loadMore();
+						}
+					})
+				}
+
+				function loadMore() {
+					if (scrollEl.scrollTop + windowHeight >= height + setTop + paddingBottom + marginBottom - scrollReduce) {
+						binding.value();
+					}
+				}
+			}
+		}
+	}
             });
 
         </script>

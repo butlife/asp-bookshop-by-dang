@@ -43,6 +43,9 @@
 			case "3"
 			WriteSuccessMsg "处理成功!" , "main3.asp"
 			
+			case "all"
+			WriteSuccessMsg "处理成功!" , "mainAll.asp"
+			
 		
 		end select
 	Else

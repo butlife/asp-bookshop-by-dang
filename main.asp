@@ -37,8 +37,8 @@
 		strUserName = trim(rsuser("UserName") & "")
 		strUserSex = trim(rsuser("UserSex") & "")
 		struserAdd = trim(rsuser("userAdd") & "")
-		strexpdate_s = Format_Time(rsuser("expdate_s"),4)
-		strexpdate_e = Format_Time(rsuser("expdate_e"),4)
+		strexpdate_s = Format_Time(rsuser("expdate_s"),11)
+		strexpdate_e = Format_Time(rsuser("expdate_e"),11)
 		strUserTel = trim(rsuser("UserTel") & "")
 		lnguseCounts = ConvertLong(rsuser("useCounts") & "")
 		lngmaxuseCounts = ConvertLong(rsuser("maxuseCounts") & "")
@@ -57,8 +57,8 @@
         </div>
         <hr>
         <div class="row show-grid">
-          <div class="col-xs-6">登录帐号：<%=strUserAcc%></div>
-          <div class="col-xs-6">联系电话：<%=strUserTel%></div>
+          <div class="col-xs-6">帐号：<%=strUserAcc%></div>
+          <div class="col-xs-6">电话：<%=strUserTel%></div>
         </div>
         <hr>
         <div class="row show-grid">

@@ -463,6 +463,8 @@ End Function
 	  Format_Time = "(" & m & "/" & d & ")"
 	 Case 10
 	  Format_Time = "(" & m & d & "&nbsp;" & h & ":" & mi & ")"
+	 Case 11
+	  Format_Time = y & "/" & m & "/" & d
 	 End Select
 	End Function
 
@@ -480,6 +482,54 @@ End Function
 		case 9:Cnum="九"
 		case 0:Cnum="零"
 		end select
+	end function
+	
+	function DBC2SBC(str,flag)
+	'全半角转换 flag = 0为 半转全，=1为全转半
+	 dim i
+	 if len(str)<=0 then 
+	 REsponse.Write("字符串参数为空") 
+	exit function 
+	 end if
+	 for i=1 to len(str)
+	 str1=asc(mid(str,i,1))
+	 if str1>0 and str1<=125 and not flag then
+	 dbc2sbc=dbc2sbc&chr(asc(mid(str,i,1))-23680)
+	 else
+	 dbc2sbc=dbc2sbc&chr(asc(mid(str,i,1))+23680)
+	 end if
+	 next
+	End function
+	
+	function replaceCode(str)
+		str = replace(str,",","，")
+		str = replace(str,".","。")
+		str = replace(str,"~","～")
+		str = replace(str,"!","！")
+		str = replace(str,"@","＠")
+		str = replace(str,"#","＃")
+		str = replace(str,"$","￥")
+		str = replace(str,"%","％")
+		str = replace(str,"^","……")
+		str = replace(str,"&","＆")
+		str = replace(str,"*","×")
+		str = replace(str,"(","（")
+		str = replace(str,")","）")
+		str = replace(str,"-","－")
+		str = replace(str,"=","＝")
+		str = replace(str,"+","＋")
+		str = replace(str,"\","＼")
+		str = replace(str,"[","【")
+		str = replace(str,"]","】")
+		str = replace(str,";","；")
+		str = replace(str,"'","‘")
+		str = replace(str,":","：")
+		str = replace(str,"?","？")
+		str = replace(str,"""","“")
+		str = replace(str,"/","、")
+		str = replace(str,"<","《")
+		str = replace(str,">","》")
+		replaceCode = str
 	end function
 %>
 

@@ -84,7 +84,7 @@ function allchk(frm){
 	var tempFrm = document.getElementsByName(frm)[0];
 	var tempMainChk = tempFrm.mainchk;
 	var tempChk = tempFrm.shopId;
-	for(var i=0; i<=tempChk.length; i++) {
+	for(var i=0; i<tempChk.length; i++) {
 		tempChk[i].checked = tempMainChk.checked;
 	}
 }
@@ -96,13 +96,14 @@ function allchk(frm){
   <div id="headPanel">己完结订单-订单列表</div>
   <div id="buttonPanel">
 <form action="#" method="post" name="form1">
-    <input type="hidden" name ="main" id="main" value="0" />
+    <input type="hidden" name ="main" id="main" value="3" />
     <input type="hidden" name="Query" value="">
     <input type="hidden" name="Page" value="">
     <a class="" href="main.asp">已下单</a>
     <a class="" href="main1.asp">已发货</a>
     <a class="" href="main2.asp">待收回</a>
     <a class="" href="main3.asp">己完结</a>
+    <a class="" href="mainAll.asp">全部</a>
     <span class="red">||</span>
 <%
 	Dim lngInfoID, strtitle, strKeyWords, lngShopID, lnguserId, strUseracc, strusername, strusertel, strAdddate, lngshopState
@@ -190,7 +191,7 @@ function allchk(frm){
 %>
 <form method="post" name="userOrderFrm<%=lnguserId%>" action="">
 <input type="hidden" name="userid" id="userid" value="<%=lnguserId%>" />
-<input type="hidden" name ="main" id="main" value="2" />
+<input type="hidden" name ="main" id="main" value="3" />
 <table width="96%" border="1" cellspacing="0" cellpadding="0" <%If i Mod 2 = 0 Then response.write "align=""left""" else response.write "align=""right""" end if%>>
   <tr>
     <th>姓名</th>
@@ -281,7 +282,7 @@ function allchk(frm){
 			response.write "<td>" & strAdddate & " <span class=""red""> &gt; </span> " & strSendDate & " <span class=""red""> &gt; </span>" & strReturnedDate & " <span class=""red""> &gt; </span>" & strfinishdate & "</td>"
 			response.write "<td>" & strState & "</td>"
 			if i = 0 then
-				response.write "<td rowspan=""9"" style=""text-align:center;"">"
+				response.write "<td rowspan=""999"" style=""text-align:center;"">"
 				
 				response.write "<input type=""button"" class=""Button"" onClick=""btnManyDelete_Click('userOrderFrm" & uid & "');"" value=""删除"" />"
 				

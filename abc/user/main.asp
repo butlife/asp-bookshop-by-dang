@@ -39,14 +39,14 @@
             <th nowrap="nowrap">帐号</th>
             <th nowrap="nowrap">电话</th>
             <th nowrap="nowrap">有效期</th>
-            <th nowrap="nowrap" title="单次借书数量/最大借书次数/会员状态">次数/状态</th>
+            <th nowrap="nowrap" title="单次借书数量/剩余借书次数|总计借书次数/会员状态">次数/状态</th>
             <th nowrap="nowrap">操作</th>
           </tr>
         </thead>
         <tbody class="scrollContent">
 <%
 		'获取数据，显示列表
-		Dim lngUserId, strUserName, strusersex, struseracc, strexpdate_s, strexpdate_e, lnguseCounts, lngmaxuseCounts, bispassed, strusertel
+		Dim lngUserId, strUserName, strusersex, struseracc, strexpdate_s, strexpdate_e, lnguseCounts, lngmaxuseCounts, lngmaxuseCountsTemp, bispassed, strusertel
 		Dim rsUser, i, strSql, strQuery
 		Dim lngPageSize, lngPageCount, lngCurrPage, lngRecordCount, bPagination
 		
@@ -83,6 +83,7 @@
 				strexpdate_e = Format_Time(rsUser("expdate_e"), 5)
 				lnguseCounts = ConvertLong(rsUser("useCounts") & "")
 				lngmaxuseCounts = ConvertLong(rsUser("maxuseCounts") & "")
+				lngmaxuseCountsTemp = ConvertLong(rsUser("maxuseCountsTemp") & "")
 				bispassed = ConvertLong(rsUser("ispassed") & "")
 				strusertel = trim(rsUser("usertel") & "")
 				
@@ -93,12 +94,12 @@
 				End If
 		
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & ((lngCurrPage - 1) * lngPageSize + i + 1) & "</td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strUserName) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center""><a href=""../orders/mainall.asp?UserKeyWords=" & struseracc & """>" & TdString(strUserName) & "</a></td>" & vbCrLf
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strusersex) & "</td>" & vbCrLf
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(struseracc) & "</td>" & vbCrLf
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strusertel) & "</td>" & vbCrLf
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(strexpdate_s & "-" & strexpdate_e) & "</td>" & vbCrLf
-				Response.Write "<td nowrap=""nowrap"" align=""center"">" & TdString(lnguseCounts & "|" & lngmaxuseCounts & "/" & getState(bispassed)) & "</td>" & vbCrLf
+				Response.Write "<td nowrap=""nowrap"" align=""center"" title=""单次借书数量/剩余借书次数|总计借书次数/会员状态"">" & TdString("每次" & lnguseCounts & "本/剩" & lngmaxuseCountsTemp & "|总" & lngmaxuseCounts & "/" & getState(bispassed)) & "</td>" & vbCrLf
 				Response.Write "<td nowrap=""nowrap"" align=""center"">" & vbCrLf
 				Response.Write "<a class='admin_btn' href='modify.asp?Id=" & lngUserId & "'>修改</a>" & vbCrLf
 				Response.Write "<a class='admin_btn' href='javascript:btnDelete_Click(" & lngUserId & ")'>删除</a>" & vbCrLf

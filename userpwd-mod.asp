@@ -49,8 +49,8 @@
     <div class="container">
       <form class="form-usermod" id="form-usermod" method="post">
         <div class="row show-grid">
-          <div class="col-xs-6">登录帐号：<%=strUserAcc%></div>
-          <div class="col-xs-6">联系电话：<%=strUserTel%></div>
+          <div class="col-xs-6">帐号：<%=strUserAcc%></div>
+          <div class="col-xs-6">电话：<%=strUserTel%></div>
         </div>
         <hr>
         <div class="row show-grid">

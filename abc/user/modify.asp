@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%
-	Dim lngUserId, struserName, struserAcc, struserAdd, struserSex, struserpwd, strusertel, strexpdate_s, strexpdate_e, strRemark, lnguseCounts, lngmaxuseCounts, strhobby, lngispassed
+	Dim lngUserId, struserName, struserAcc, struserAdd, struserSex, struserpwd, strusertel, strexpdate_s, strexpdate_e, strRemark, lnguseCounts, lngmaxuseCounts, lngmaxuseCounts_temp, strhobby, lngispassed
 	Dim strSql, rsUser
 	
 	lngUserId = ConvertLong(Request("Id") & "")
@@ -30,6 +30,7 @@
 		strexpdate_e = Trim(rsUser("expdate_e") & "")
 		lnguseCounts = ConvertLong(rsUser("useCounts") & "")
 		lngmaxuseCounts = ConvertLong(rsUser("maxuseCounts") & "")
+		lngmaxuseCounts_temp = ConvertLong(rsUser("maxuseCountsTemp") & "")
 		strhobby = Trim(rsUser("hobby") & "")
 		lngispassed = ConvertLong(rsUser("ispassed") & "")
 		strRemark = Trim(rsUser("Remark") & "")
@@ -89,7 +90,7 @@ function btnSubmit_Click(){
     </div>
     <div>
       <label id="lblUserAcc">会员帐号</label>
-      <input id="useracc" name="useracc" type="text" size="20" maxlength="20" value="<%=struseracc%>" readonly="readonly" style="background:#ccc;" />
+      <input id="useracc" name="useracc" type="text" size="20" maxlength="20" value="<%=struseracc%>" readonly style="background:#ccc;" />
     </div>
     <div>
       <label id="luserpwd">会员密码</label>
@@ -107,6 +108,7 @@ function btnSubmit_Click(){
       <label id="lsortname">借书限制</label>
       <span>单次借书数量<input id="useCounts" name="useCounts" type="text" size="5" maxlength="8" value="<%=lnguseCounts%>" onKeyUp="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" /></span>
       <span>最大借书次数<input id="maxuseCounts" name="maxuseCounts" type="text" size="5" maxlength="8" value="<%=lngmaxuseCounts%>" onKeyUp="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" /></span>
+      <span>目前剩余 <%=lngmaxuseCounts_temp%> 次</span>
     </div>
     <div>
       <label id="lblLock">是否启用</label>

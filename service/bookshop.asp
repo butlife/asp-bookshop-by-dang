@@ -24,19 +24,22 @@
 
 	Set rsBook = Server.CreateObject("ADODB.RecordSet")
 '	strsql = "select Title, InfoId, PicUrl from info_t " & strQuery & " order by istop desc, iorder desc"
-	strsql = "select Title, InfoId, PicUrl, content from info_t " & strQuery & " order by infoid, title asc"
+	strsql = "select Title, InfoId, PicUrl from info_t " & strQuery & " order by infoid, title asc"
 	if rsBook.state = 1 then rs.close
 	rsBook.open strsql,conn,1,1
 	rsBook.pagesize = glngPageSize_phone
 
-	if lngPageNum > rsBook.PageCount then  
-		rsBook.AbsolutePage = rsBook.PageCount  
-	elseif lngPageNum <= 0 then  
+'	if lngPageNum > rsBook.PageCount then  
+'		rsBook.AbsolutePage = rsBook.PageCount
+'	elseif lngPageNum <= 0 then  
+'		lngPageNum = 1
+	if lngPageNum <= 0 then  
 		lngPageNum = 1
-	else  
+	end if
+'	else  
 		rsBook.AbsolutePage = lngPageNum   
-	end if  
-	lngPageNum = rsBook.AbsolutePage	
+'	end if  
+'	lngPageNum = rsBook.AbsolutePage	
 %>
 {
     "state": 0,
@@ -54,14 +57,13 @@
 			lnginfoId = rsBook("infoId")
 			strTitle = rsBook("Title")
 			strpicurl = rsBook("picurl")
-			strcontent = rsBook("content")
+			'strcontent = rsBook("content")
 			lngisFav = getFav(lnginfoId)
 %>
         {
             "infoId" : "<%=lnginfoId%>",
             "title" : "<%=strTitle%>",
             "picurl" : "<%=strpicurl%>",
-            "content" : "<%=strcontent%>",
 			"fav":"<%=lngisFav%>"
         }
 <%
